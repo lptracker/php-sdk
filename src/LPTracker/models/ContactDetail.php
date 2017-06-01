@@ -47,21 +47,21 @@ class ContactDetail extends Model
     /**
      * ContactDetail constructor.
      *
-     * @param array $options
+     * @param array $detailData
      */
-    public function __construct(array $options = [])
+    public function __construct(array $detailData = [])
     {
-        if (isset($options['id'])) {
-            $this->id = $options['id'];
+        if (isset($detailData['id'])) {
+            $this->id = $detailData['id'];
         }
-        if (isset($options['contact_id'])) {
-            $this->contactId = $options['contact_id'];
+        if (isset($detailData['contact_id'])) {
+            $this->contactId = $detailData['contact_id'];
         }
-        if (isset($options['type'])) {
-            $this->type = $options['type'];
+        if (isset($detailData['type'])) {
+            $this->type = $detailData['type'];
         }
-        if (isset($options['data'])) {
-            $this->data = $options['data'];
+        if (isset($detailData['data'])) {
+            $this->data = $detailData['data'];
         }
     }
 

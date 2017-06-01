@@ -60,7 +60,7 @@ class LPTracker extends LPTrackerBase
 
 
     /**
-     * @return array
+     * @return Project[]
      */
     public function getProjectList()
     {
@@ -95,7 +95,7 @@ class LPTracker extends LPTrackerBase
     /**
      * @param $project
      *
-     * @return array
+     * @return Custom[]
      */
     public function getProjectCustoms($project)
     {
@@ -284,7 +284,7 @@ class LPTracker extends LPTrackerBase
     /**
      * @param $lead
      *
-     * @return array
+     * @return Comment[]
      */
     public function getLeadComments($lead)
     {

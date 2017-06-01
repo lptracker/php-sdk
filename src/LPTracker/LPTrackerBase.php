@@ -148,5 +148,5 @@ abstract class LPTrackerBase
      *
      * @return mixed
      */
-    public abstract function login($login, $password, $serviceName = '');
+    abstract public function login($login, $password, $serviceName = '');
 }

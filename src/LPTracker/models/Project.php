@@ -2,6 +2,8 @@
 
 namespace LPTracker\models;
 
+use LPTracker\exceptions\LPTrackerSDKException;
+
 /**
  * Class Project
  * @package LPTracker\models
@@ -33,22 +35,39 @@ class Project extends Model
     /**
      * Project constructor.
      *
-     * @param array $options
+     * @param array $projectData
      */
-    public function __construct(array $options = [])
+    public function __construct(array $projectData = [])
     {
-        if (isset($options['id'])) {
-            $this->id = $options['id'];
+        if (isset($projectData['id'])) {
+            $this->id = $projectData['id'];
         }
-        if (isset($options['name'])) {
-            $this->name = $options['name'];
+        if (isset($projectData['name'])) {
+            $this->name = $projectData['name'];
         }
-        if (isset($options['page'])) {
-            $this->page = $options['page'];
+        if (isset($projectData['page'])) {
+            $this->page = $projectData['page'];
         }
-        if (isset($options['domain'])) {
-            $this->page = $options['domain'];
+        if (isset($projectData['domain'])) {
+            $this->page = $projectData['domain'];
         }
+    }
+
+
+    /**
+     * @return bool
+     * @throws LPTrackerSDKException
+     */
+    public function validate()
+    {
+        if (empty($this->id)) {
+            throw new LPTrackerSDKException('Project ID is required');
+        }
+        if (empty($this->name)) {
+            throw new LPTrackerSDKException('Project name is required');
+        }
+
+        return true;
     }
 
 

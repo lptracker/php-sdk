@@ -60,7 +60,7 @@ class LPTracker extends LPTrackerBase
 
 
     /**
-     * @return array
+     * @return Project[]
      */
     public function getProjectList()
     {
@@ -95,7 +95,7 @@ class LPTracker extends LPTrackerBase
     /**
      * @param $project
      *
-     * @return array
+     * @return Custom[]
      */
     public function getProjectCustoms($project)
     {
@@ -119,7 +119,7 @@ class LPTracker extends LPTrackerBase
 
 
     /**
-     * @param       $projectId
+     * @param       $project
      * @param array $details
      * @param array $contactData
      *
@@ -127,7 +127,7 @@ class LPTracker extends LPTrackerBase
      * @throws LPTrackerSDKException
      */
     public function createContact(
-        $projectId,
+        $project,
         array $details,
         array $contactData = []
     ) {
@@ -135,7 +135,13 @@ class LPTracker extends LPTrackerBase
             throw new LPTrackerSDKException('Contact details can not be empty');
         }
 
-        $contactData['project_id'] = $projectId;
+        if ($project instanceof Project) {
+            $project = $project->getId();
+        } else {
+            $project = intval($project);
+        }
+
+        $contactData['project_id'] = $project;
         $contactData['details'] = $details;
 
         $contact = new Contact($contactData);
@@ -284,7 +290,7 @@ class LPTracker extends LPTrackerBase
     /**
      * @param $lead
      *
-     * @return array
+     * @return Comment[]
      */
     public function getLeadComments($lead)
     {

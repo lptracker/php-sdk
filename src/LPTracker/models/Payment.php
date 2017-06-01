@@ -47,6 +47,25 @@ class Payment extends Model
 
 
     /**
+     *
+     */
+    public function toArray()
+    {
+        $result = [];
+
+        if ( ! empty($this->category)) {
+            $result['category'] = $this->getCategory();
+        }
+        if ( ! empty($this->purpose)) {
+            $result['purpose'] = $this->getPurpose();
+        }
+        if ( ! empty($this->sum)) {
+            $result['sum'] = $this->getSum();
+        }
+    }
+
+
+    /**
      * @return bool
      * @throws LPTrackerSDKException
      */

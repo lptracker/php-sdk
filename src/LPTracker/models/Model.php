@@ -20,14 +20,14 @@ abstract class Model
     /**
      * @return array
      */
-    public abstract function toArray();
+    abstract public function toArray();
 
 
     /**
      * @return bool
      * @throws LPTrackerSDKException
      */
-    public abstract function validate();
+    abstract public function validate();
 
 
     /**

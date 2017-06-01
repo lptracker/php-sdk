@@ -63,7 +63,7 @@ class LPTrackerRequest
             throw new LPTrackerResponseException($body['errors'][0]);
         }
 
-        if (empty($body['status']) || empty($body['result']) || $body['status'] != 'success') {
+        if (empty($body['status']) || $body['status'] != 'success') {
             throw new LPTrackerResponseException('Unknown response error');
         }
 

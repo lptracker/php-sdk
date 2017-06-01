@@ -7,8 +7,8 @@
   "license": "Apache2",
   "authors": [
     {
-      "name": "LPTracker",
-      "homepage": "https://github.com/lptracker/php-sdk/contributors"
+      "name": "Andrey Voropaev",
+      "email": "avoropaev@lptracker.ru"
     }
   ],
   "require": {

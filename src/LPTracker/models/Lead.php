@@ -1,0 +1,329 @@
+<?php
+
+namespace LPTracker\models;
+
+use LPTracker\exceptions\LPTrackerSDKException;
+
+/**
+ * Class Lead
+ * @package LPTracker\models
+ */
+class Lead extends Model
+{
+
+    /**
+     * @var integer
+     */
+    protected $id;
+
+    /**
+     * @var integer
+     */
+    protected $contactId;
+
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var integer
+     */
+    protected $funnelId;
+
+    /**
+     * @var string
+     */
+    protected $source;
+
+    /**
+     * @var integer
+     */
+    protected $ownerId;
+
+    /**
+     * @var Payment[]
+     */
+    protected $payments = [];
+
+    /**
+     * @var Custom[]
+     */
+    protected $customs = [];
+
+
+    /**
+     * Lead constructor.
+     *
+     * @param array $leadData
+     */
+    public function __construct(array $leadData = [])
+    {
+        if ( ! empty($leadData['id'])) {
+            $this->id = intval($leadData['id']);
+        }
+        if ( ! empty($leadData['contact_id'])) {
+            $this->contactId = intval($leadData['contact_id']);
+        }
+        if ( ! empty($leadData['name'])) {
+            $this->name = $leadData['name'];
+        }
+        if ( ! empty($leadData['funnel'])) {
+            $this->funnelId = intval($leadData['funnel']);
+        }
+        if ( ! empty($leadData['source'])) {
+            $this->source = $leadData['source'];
+        }
+        if ( ! empty($leadData['owner'])) {
+            $this->ownerId = intval($leadData['owner']);
+        }
+        if ( ! empty($leadData['payments']) && is_array($leadData['payments'])) {
+            foreach ($leadData['payments'] as $paymentData) {
+                $paymentModel = new Payment($paymentData);
+                $this->addPayment($paymentModel);
+            }
+        }
+        if ( ! empty($leadData['custom']) && is_array($leadData['custom'])) {
+            foreach ($leadData['custom'] as $customData) {
+                $customModel = new Custom($customData, $this->id);
+                $this->addCustom($customModel);
+            }
+        }
+    }
+
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $result = [
+            'contact_id' => $this->contactId,
+        ];
+        if ( ! empty($this->id)) {
+            $result['id'] = $this->getId();
+        }
+        if ( ! empty($this->name)) {
+            $result['name'] = $this->getName();
+        }
+        if ( ! empty($this->funnelId)) {
+            $result['funnel'] = $this->getFunnelId();
+        }
+        if ( ! empty($this->source)) {
+            $result['source'] = $this->getSource();
+        }
+        if ( ! empty($this->ownerId)) {
+            $result['owner'] = $this->getOwnerId();
+        }
+        foreach ($this->getPayments() as $payment) {
+            $result['payments'][] = $payment->toArray();
+        }
+        foreach ($this->getCustoms() as $custom) {
+            $result['custom'][] = $custom->toArray();
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * @return bool
+     * @throws LPTrackerSDKException
+     */
+    public function validate()
+    {
+        if (empty($this->contactId)) {
+            throw new LPTrackerSDKException('Contact ID is required');
+        }
+        if (intval($this->contactId) <= 0) {
+            throw new LPTrackerSDKException('Invalid contact id');
+        }
+        if ( ! empty($this->funnelId) && intval($this->funnelId) <= 0) {
+            throw new LPTrackerSDKException('Invalid funnel ID');
+        }
+        if ( ! empty($this->ownerId) && intval($this->ownerId) < 0) {
+            throw new LPTrackerSDKException('Invalid owner ID');
+        }
+        foreach ($this->getPayments() as $payment) {
+            $payment->validate();
+        }
+
+        return true;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return intval($this->id);
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getContactId()
+    {
+        return intval($this->contactId);
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getFunnelId()
+    {
+        return $this->funnelId;
+    }
+
+
+    /**
+     * @param int $funnelId
+     *
+     * @return $this
+     */
+    public function setFunnelId($funnelId)
+    {
+        $this->funnelId = intval($funnelId);
+
+        return $this;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+
+    /**
+     * @param string $source
+     *
+     * @return $this
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Payment[]
+     */
+    public function getPayments()
+    {
+        return $this->payments;
+    }
+
+
+    /**
+     * @param array $payments
+     *
+     * @return $this
+     */
+    public function setPayments(array $payments)
+    {
+        $this->payments = $payments;
+
+        return $this;
+    }
+
+
+    /**
+     * @param Payment $payment
+     *
+     * @return $this
+     */
+    public function addPayment(Payment $payment)
+    {
+        $this->payments[] = $payment;
+
+        return $this;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getOwnerId()
+    {
+        return $this->ownerId;
+    }
+
+
+    /**
+     * @param int $ownerId
+     *
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->ownerId = intval($ownerId);
+
+        return $this;
+    }
+
+
+    /**
+     * @return Custom[]
+     */
+    public function getCustoms()
+    {
+        return $this->customs;
+    }
+
+
+    /**
+     * @param Custom[] $customs
+     *
+     * @return $this
+     */
+    public function setCustoms(array $customs)
+    {
+        $this->customs = $customs;
+
+        return $this;
+    }
+
+
+    /**
+     * @param Custom $custom
+     *
+     * @return $this
+     */
+    public function addCustom(Custom $custom)
+    {
+        $this->customs[] = $custom;
+
+        return $this;
+    }
+}

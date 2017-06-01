@@ -1,0 +1,23 @@
+{
+  "name": "lptracker/php-sdk",
+  "description": "LPTracker PHP SDK",
+  "keywords": ["lptracker", "sdk", "php-sdk"],
+  "type": "library",
+  "homepage": "https://github.com/lptracker/php-sdk",
+  "license": "Apache2",
+  "authors": [
+    {
+      "name": "LPTracker",
+      "homepage": "https://github.com/lptracker/php-sdk/contributors"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "anlutro/curl": "^1.4"
+  },
+  "autoload": {
+    "classmap": ["src"]
+  }
+}

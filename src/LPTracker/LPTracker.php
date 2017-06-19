@@ -4,6 +4,7 @@ namespace LPTracker;
 
 use LPTracker\models\Comment;
 use LPTracker\models\Contact;
+use LPTracker\models\ContactField;
 use LPTracker\models\Custom;
 use LPTracker\models\Lead;
 use LPTracker\models\Project;
@@ -119,9 +120,36 @@ class LPTracker extends LPTrackerBase
 
 
     /**
+     * @param $project
+     *
+     * @return ContactField[]
+     */
+    public function getProjectFields($project)
+    {
+        if ($project instanceof Project) {
+            $project = $project->getId();
+        } else {
+            $project = intval($project);
+        }
+
+        $url = '/project/'.$project.'/fields';
+
+        $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
+
+        $result = [];
+        foreach ($response as $customData) {
+            $result[] = new ContactField($customData);
+        }
+
+        return $result;
+    }
+
+
+    /**
      * @param       $project
      * @param array $details
      * @param array $contactData
+     * @param array $fields
      *
      * @return Contact
      * @throws LPTrackerSDKException
@@ -129,7 +157,8 @@ class LPTracker extends LPTrackerBase
     public function createContact(
         $project,
         array $details,
-        array $contactData = []
+        array $contactData = [],
+        array $fields = []
     ) {
         if (empty($details)) {
             throw new LPTrackerSDKException('Contact details can not be empty');
@@ -143,6 +172,15 @@ class LPTracker extends LPTrackerBase
 
         $contactData['project_id'] = $project;
         $contactData['details'] = $details;
+
+        foreach ($fields as $fieldId => $fieldValue) {
+            if ($fieldValue instanceof ContactField) {
+                $fieldId = $fieldValue->getId();
+                $fieldValue = $fieldValue->getValue();
+            }
+
+            $contactData['fields'][$fieldId] = $fieldValue;
+        }
 
         $contact = new Contact($contactData);
         $contact->validate();
@@ -187,6 +225,7 @@ class LPTracker extends LPTrackerBase
      * @param       $contactId
      * @param array $details
      * @param array $contactData
+     * @param array $fields
      *
      * @return Contact
      * @throws LPTrackerSDKException
@@ -194,7 +233,8 @@ class LPTracker extends LPTrackerBase
     public function editContact(
         $contactId,
         array $details,
-        array $contactData = []
+        array $contactData = [],
+        array $fields = []
     ) {
         if (empty($details)) {
             throw new LPTrackerSDKException('Contact details can not be empty');
@@ -203,10 +243,49 @@ class LPTracker extends LPTrackerBase
         $contactData['id'] = $contactId;
         $contactData['details'] = $details;
 
+        foreach ($fields as $fieldId => $fieldValue) {
+            if ($fieldValue instanceof ContactField) {
+                $fieldId = $fieldValue->getId();
+                $fieldValue = $fieldValue->getValue();
+            }
+
+            $contactData['fields'][$fieldId] = $fieldValue;
+        }
+
         $contact = new Contact($contactData);
         $contact->validate();
 
         return $this->saveContact($contact);
+    }
+
+
+    /**
+     * @param $contact
+     * @param $field
+     * @param $newValue
+     *
+     * @return ContactField
+     */
+    public function updateContactField($contact, $field, $newValue)
+    {
+        if ($contact instanceof Contact) {
+            $contact = $contact->getId();
+        }
+        if ($field instanceof ContactField) {
+            $field = $field->getId();
+        }
+
+        $url = '/contact/'.$contact.'/field/'.$field;
+
+        $data = [
+            'value' => $newValue
+        ];
+
+        $response = LPTrackerRequest::sendRequest($url, $data, 'PUT', $this->token, $this->address);
+
+        $contactField = new ContactField($response);
+
+        return $contactField;
     }
 
 

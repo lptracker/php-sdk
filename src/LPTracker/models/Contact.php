@@ -41,6 +41,11 @@ class Contact extends Model
      */
     protected $details = [];
 
+    /**
+     * @var ContactField[]
+     */
+    protected $fields = [];
+
 
     /**
      * Contact constructor.
@@ -68,6 +73,13 @@ class Contact extends Model
             foreach ($contactData['details'] as $detail) {
                 $detailModel = new ContactDetail($detail);
                 $this->addDetail($detailModel);
+            }
+        }
+        if ( ! empty($contactData['fields']) && is_array($contactData['fields'])) {
+            foreach ($contactData['fields'] as $fieldData) {
+                $fieldData['contact_id'] = $this->id;
+                $fieldModel = new ContactField($fieldData);
+                $this->addField($fieldModel);
             }
         }
     }
@@ -118,6 +130,9 @@ class Contact extends Model
         }
         foreach ($this->getDetails() as $detail) {
             $result['details'][] = $detail->toArray();
+        }
+        foreach ($this->getFields() as $field) {
+            $result['fields'][$field->getId()] = $field->getValue();
         }
 
         return $result;
@@ -244,6 +259,47 @@ class Contact extends Model
     {
         $detail->validate();
         $this->details[] = $detail;
+
+        return $this;
+    }
+
+
+    /**
+     * @return ContactField[]
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+
+    /**
+     * @param ContactField[] $fields
+     *
+     * @return $this
+     */
+    public function setFields(array $fields)
+    {
+        /** @var ContactDetail $detail */
+        foreach ($fields as $field) {
+            $field->validate();
+        }
+
+        $this->fields = $fields;
+
+        return $this;
+    }
+
+
+    /**
+     * @param ContactField $field
+     *
+     * @return $this
+     */
+    public function addField(ContactField $field)
+    {
+        $field->validate();
+        $this->fields[] = $field;
 
         return $this;
     }

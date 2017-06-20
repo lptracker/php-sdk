@@ -260,6 +260,77 @@ class LPTracker extends LPTrackerBase
 
 
     /**
+     * @param       $project
+     * @param array $searchOptions
+     *
+     * @return array
+     * @throws LPTrackerSDKException
+     */
+    public function searchContacts($project, array $searchOptions = [])
+    {
+        if ($project instanceof Project) {
+            $project = $project->getId();
+        }
+        $project = intval($project);
+        if ($project <= 0) {
+            throw new LPTrackerSDKException('Invalid project id');
+        }
+
+        $url = '/contact/search?';
+
+        $data = [
+            'project_id' => $project
+        ];
+        if (isset($searchOptions['email'])) {
+            $data['email'] = $searchOptions['email'];
+        }
+        if (isset($searchOptions['phone'])) {
+            $data['phone'] = $searchOptions['phone'];
+        }
+
+        $url = $url.http_build_query($data);
+
+        $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
+
+        $result = [];
+        foreach ($response as $contactData) {
+            $result[] = new Contact($contactData);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * @param $contact
+     *
+     * @return array
+     * @throws LPTrackerSDKException
+     */
+    public function contactLeads($contact)
+    {
+        if ($contact instanceof Contact) {
+            $contact = $contact->getId();
+        }
+        $contact = intval($contact);
+        if ($contact <= 0) {
+            throw new LPTrackerSDKException('Invalid contact id');
+        }
+
+        $url = '/contact/'.$contact.'/leads';
+
+        $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
+
+        $result = [];
+        foreach ($response as $leadData) {
+            $result[] = new Lead($leadData);
+        }
+
+        return $result;
+    }
+
+
+    /**
      * @param $contact
      * @param $field
      * @param $newValue

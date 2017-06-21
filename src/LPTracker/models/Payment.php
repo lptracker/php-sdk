@@ -47,7 +47,7 @@ class Payment extends Model
 
 
     /**
-     *
+     * @return array
      */
     public function toArray()
     {
@@ -62,6 +62,8 @@ class Payment extends Model
         if ( ! empty($this->sum)) {
             $result['sum'] = $this->getSum();
         }
+
+        return $result;
     }
 
 

@@ -78,12 +78,8 @@ class ContactField extends Model
      */
     public function validate()
     {
-        if (empty($this->type)) {
-            throw new LPTrackerSDKException('Detail type can not be null: '.$this->__toString());
-        }
-        if ( ! in_array($this->type, self::getAllTypes())) {
-            throw new LPTrackerSDKException('Detail type not in ('.implode(',',
-                    self::getAllTypes()).'): '.$this->__toString());
+        if (empty($this->id)) {
+            throw new LPTrackerSDKException('Field id can not be null: '.$this->__toString());
         }
 
         return true;

@@ -173,20 +173,23 @@ class LPTracker extends LPTrackerBase
         $contactData['project_id'] = $project;
         $contactData['details'] = $details;
 
+        $fieldsArr = [];
         foreach ($fields as $fieldId => $fieldValue) {
             if ($fieldValue instanceof ContactField) {
                 $fieldId = $fieldValue->getId();
                 $fieldValue = $fieldValue->getValue();
             }
 
-            $contactData['fields'][$fieldId] = $fieldValue;
+            $fieldsArr[$fieldId] = $fieldValue;
         }
 
         $contact = new Contact($contactData);
         $contact->validate();
 
-        $response = LPTrackerRequest::sendRequest('/contact', $contact->toArray(), 'POST', $this->token,
-            $this->address);
+        $data = $contact->toArray();
+        $data['fields'] = $fieldsArr;
+
+        $response = LPTrackerRequest::sendRequest('/contact', $data, 'POST', $this->token, $this->address);
 
         $resultContact = new Contact($response);
 
@@ -204,6 +207,15 @@ class LPTracker extends LPTrackerBase
     {
         if ( ! $contact->validate()) {
             throw new LPTrackerSDKException('Invalid contact');
+        }
+
+        $data = $contact->toArray();
+        if ( ! empty($data['fields'])) {
+            $fields = [];
+            foreach ($data['fields'] as $field) {
+                $fields[$field['id']] = $field['value'];
+            }
+            $data['fields'] = $fields;
         }
 
         if ($contact->getId() > 0) {
@@ -249,7 +261,10 @@ class LPTracker extends LPTrackerBase
                 $fieldValue = $fieldValue->getValue();
             }
 
-            $contactData['fields'][$fieldId] = $fieldValue;
+            $contactData['fields'][] = [
+                'id'    => $fieldId,
+                'value' => $fieldValue
+            ];
         }
 
         $contact = new Contact($contactData);

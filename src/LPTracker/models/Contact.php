@@ -91,8 +91,8 @@ class Contact extends Model
      */
     public function validate()
     {
-        if (!empty($this->id) && empty($this->projectId)) {
-            throw new LPTrackerSDKException('Project ID is required');
+        if (empty($this->id) && empty($this->projectId)) {
+            throw new LPTrackerSDKException('Project ID or Contact ID is required');
         }
         if (empty($this->details)) {
             throw new LPTrackerSDKException('The contact does not have valid detail');

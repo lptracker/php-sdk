@@ -71,6 +71,7 @@ class Contact extends Model
         }
         if ( ! empty($contactData['details']) && is_array($contactData['details'])) {
             foreach ($contactData['details'] as $detail) {
+                $detail['contact_id'] = $this->id;
                 $detailModel = new ContactDetail($detail);
                 $this->addDetail($detailModel);
             }

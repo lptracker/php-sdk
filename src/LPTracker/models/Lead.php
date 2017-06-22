@@ -42,6 +42,11 @@ class Lead extends Model
     protected $ownerId;
 
     /**
+     * @var \DateTime
+     */
+    protected $createdAt;
+
+    /**
      * @var Payment[]
      */
     protected $payments = [];
@@ -50,6 +55,11 @@ class Lead extends Model
      * @var Custom[]
      */
     protected $customs = [];
+
+    /**
+     * @var array
+     */
+    protected $options = [];
 
 
     /**
@@ -89,6 +99,16 @@ class Lead extends Model
                 $this->addCustom($customModel);
             }
         }
+        if ( ! empty($leadData['lead_date'])) {
+            $date = \DateTime::createFromFormat('d.m.Y H:i', $leadData['lead_date']);
+            $this->setCreatedAt($date);
+        }
+        if ( ! empty($leadData['deal_date'])) {
+            $this->options['deal_date'] = $leadData['deal_date'];
+        }
+        if ( ! empty($leadData['params']) && is_array($leadData['params'])) {
+            $this->options['params'] = $leadData['params'];
+        }
     }
 
 
@@ -115,11 +135,17 @@ class Lead extends Model
         if ( ! empty($this->ownerId)) {
             $result['owner'] = $this->getOwnerId();
         }
+        if ( ! empty($this->createdAt)) {
+            $result['lead_date'] = $this->getCreatedAt()->format('d.m.Y H:i');
+        }
         foreach ($this->getPayments() as $payment) {
             $result['payments'][] = $payment->toArray();
         }
         foreach ($this->getCustoms() as $custom) {
             $result['custom'][] = $custom->toArray();
+        }
+        foreach ($this->options as $key => $value) {
+            $result[$key] = $value;
         }
 
         return $result;
@@ -323,6 +349,28 @@ class Lead extends Model
     public function addCustom(Custom $custom)
     {
         $this->customs[] = $custom;
+
+        return $this;
+    }
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+
+    /**
+     * @param \DateTime $createdAt
+     *
+     * @return $this
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

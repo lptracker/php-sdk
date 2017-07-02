@@ -198,6 +198,34 @@ class LPTracker extends LPTrackerBase
 
 
     /**
+     * @param $contact
+     *
+     * @return Contact
+     * @throws LPTrackerSDKException
+     */
+    public function getContact($contact)
+    {
+        if ($contact instanceof Contact) {
+            $contact = $contact->getId();
+        } else {
+            $contact = intval($contact);
+        }
+
+        if ($contact <= 0) {
+            throw new LPTrackerSDKException('Invalid contact ID');
+        }
+
+        $url = '/contact/'.$contact;
+
+        $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
+
+        $resultContact = new Contact($response);
+
+        return $resultContact;
+    }
+
+
+    /**
      * @param Contact $contact
      *
      * @return Contact
@@ -402,6 +430,34 @@ class LPTracker extends LPTrackerBase
         }
 
         $response = LPTrackerRequest::sendRequest('/lead', $data, 'POST', $this->token, $this->address);
+
+        $resultLead = new Lead($response);
+
+        return $resultLead;
+    }
+
+
+    /**
+     * @param $lead
+     *
+     * @return Lead
+     * @throws LPTrackerSDKException
+     */
+    public function getLead($lead)
+    {
+        if ($lead instanceof Lead) {
+            $lead = $lead->getId();
+        } else {
+            $lead = intval($lead);
+        }
+
+        if ($lead <= 0) {
+            throw new LPTrackerSDKException('Invalid lead ID');
+        }
+
+        $url = '/lead/'.$lead;
+
+        $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
 
         $resultLead = new Lead($response);
 

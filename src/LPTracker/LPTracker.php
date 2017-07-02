@@ -509,6 +509,55 @@ class LPTracker extends LPTrackerBase
 
 
     /**
+     * @param        $lead
+     * @param string $category
+     * @param string $purpose
+     * @param float  $sum
+     *
+     * @return Lead
+     * @throws LPTrackerSDKException
+     */
+    public function addLeadPayment($lead, $category, $purpose, $sum)
+    {
+        if ($lead instanceof Lead) {
+            $lead = $lead->getId();
+        } else {
+            $lead = intval($lead);
+        }
+
+        if (empty($category)) {
+            throw new LPTrackerSDKException('Category can not be empty');
+        }
+        if (empty($purpose)) {
+            throw new LPTrackerSDKException('Purpose can not be empty');
+        }
+        $sum = floatval($sum);
+
+        if ($sum <= 0) {
+            throw new LPTrackerSDKException('Invalid sum');
+        }
+
+        if ($lead <= 0) {
+            throw new LPTrackerSDKException('Invalid lead ID');
+        }
+
+        $url = '/lead/'.$lead.'/payment';
+
+        $data = [
+            'category' => $category,
+            'purpose'  => $purpose,
+            'sum'      => $sum,
+        ];
+
+        $response = LPTrackerRequest::sendRequest($url, $data, 'POST', $this->token, $this->address);
+
+        $resultLead = new Lead($response);
+
+        return $resultLead;
+    }
+
+
+    /**
      * @param $lead
      *
      * @return Comment[]

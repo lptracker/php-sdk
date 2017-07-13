@@ -37,6 +37,16 @@ class Lead extends Model
     protected $source;
 
     /**
+     * @var string
+     */
+    protected $campaign;
+
+    /**
+     * @var string
+     */
+    protected $keyword;
+
+    /**
      * @var integer
      */
     protected $ownerId;
@@ -83,6 +93,12 @@ class Lead extends Model
         }
         if ( ! empty($leadData['source'])) {
             $this->source = $leadData['source'];
+        }
+        if ( ! empty($leadData['campaign'])) {
+            $this->campaign = $leadData['campaign'];
+        }
+        if ( ! empty($leadData['keyword'])) {
+            $this->keyword = $leadData['keyword'];
         }
         if ( ! empty($leadData['owner'])) {
             $this->ownerId = intval($leadData['owner']);
@@ -131,6 +147,12 @@ class Lead extends Model
         }
         if ( ! empty($this->source)) {
             $result['source'] = $this->getSource();
+        }
+        if ( ! empty($this->campaign)) {
+            $result['campaign'] = $this->getCampaign();
+        }
+        if ( ! empty($this->keyword)) {
+            $result['keyword'] = $this->getKeyword();
         }
         if ( ! empty($this->ownerId)) {
             $result['owner'] = $this->getOwnerId();
@@ -257,6 +279,46 @@ class Lead extends Model
     public function setSource($source)
     {
         $this->source = $source;
+
+        return $this;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getCampaign()
+    {
+        return $this->campaign;
+    }
+
+
+    /**
+     * @param string $campaign
+     */
+    public function setCampaign($campaign)
+    {
+        $this->campaign = $campaign;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getKeyword()
+    {
+        return $this->keyword;
+    }
+
+
+    /**
+     * @param string $keyword
+     *
+     * @return $this
+     */
+    public function setKeyword($keyword)
+    {
+        $this->keyword = $keyword;
 
         return $this;
     }

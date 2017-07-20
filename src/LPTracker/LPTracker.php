@@ -530,6 +530,9 @@ class LPTracker extends LPTrackerBase
         if (isset($options['callback'])) {
             $data['callback'] = $options['callback'] ? true : false;
         }
+        if (isset($leadData['view_id'])) {
+            $data['view_id'] = intval($leadData['view_id']) ;
+        }
 
         $response = LPTrackerRequest::sendRequest('/lead', $data, 'POST', $this->token, $this->address);
 

@@ -47,6 +47,11 @@ class Lead extends Model
     protected $keyword;
 
     /**
+     * @var View
+     */
+    protected $view;
+
+    /**
      * @var integer
      */
     protected $ownerId;
@@ -99,6 +104,9 @@ class Lead extends Model
         }
         if ( ! empty($leadData['keyword'])) {
             $this->keyword = $leadData['keyword'];
+        }
+        if ( ! empty($leadData['view'])) {
+            $this->view = new View($leadData['view']);
         }
         if ( ! empty($leadData['owner'])) {
             $this->ownerId = intval($leadData['owner']);
@@ -159,6 +167,9 @@ class Lead extends Model
         }
         if ( ! empty($this->createdAt)) {
             $result['lead_date'] = $this->getCreatedAt()->format('d.m.Y H:i');
+        }
+        if ( ! empty($this->view)) {
+            $result['view'] = $this->view->toArray();
         }
         foreach ($this->getPayments() as $payment) {
             $result['payments'][] = $payment->toArray();
@@ -321,6 +332,15 @@ class Lead extends Model
         $this->keyword = $keyword;
 
         return $this;
+    }
+
+
+    /**
+     * @return View
+     */
+    public function getView()
+    {
+        return $this->view;
     }
 
 

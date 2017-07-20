@@ -10,6 +10,7 @@ use LPTracker\models\Lead;
 use LPTracker\models\Project;
 use LPTracker\exceptions\LPTrackerSDKException;
 use LPTracker\authentication\AccessToken;
+use LPTracker\models\View;
 
 /**
  * Class LPTracker
@@ -400,6 +401,107 @@ class LPTracker extends LPTrackerBase
         $contactField = new ContactField($response);
 
         return $contactField;
+    }
+
+
+    /**
+     * @param       $project
+     * @param array $viewData
+     *
+     * @return View
+     * @throws LPTrackerSDKException
+     */
+    public function createView($project, array $viewData = [])
+    {
+        if ($project instanceof Project) {
+            $viewData['project_id'] = $project->getId();
+        } else {
+            $viewData['project_id'] = intval($project);
+        }
+
+        $view = new View($viewData);
+        if ( ! $view->validate()) {
+            throw new LPTrackerSDKException('Invalid view data');
+        }
+
+        $data = $view->toArray();
+
+        $response = LPTrackerRequest::sendRequest('/view', $data, 'POST', $this->token, $this->address);
+
+        $resultView = new View($response);
+
+        return $resultView;
+    }
+
+
+    /**
+     * @param $view
+     *
+     * @return View
+     * @throws LPTrackerSDKException
+     */
+    public function getView($view)
+    {
+        if ($view instanceof View) {
+            $view = $view->getId();
+        } else {
+            $view = intval($view);
+        }
+
+        if ($view <= 0) {
+            throw new LPTrackerSDKException('Invalid view ID');
+        }
+
+        $url = '/view/'.$view;
+
+        $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
+
+        $resultView = new View($response);
+
+        return $resultView;
+    }
+
+
+    /**
+     * @param View $view
+     *
+     * @return View
+     * @throws LPTrackerSDKException
+     */
+    public function saveView(View $view)
+    {
+        if ( ! $view->validate()) {
+            throw new LPTrackerSDKException('Invalid view');
+        }
+
+        if ($view->getId() > 0) {
+            $url = '/view/'.$view->getId();
+
+            $response = LPTrackerRequest::sendRequest($url, $view->toArray(), 'PUT', $this->token, $this->address);
+        } else {
+            $response = LPTrackerRequest::sendRequest('/view', $view->toArray(), 'POST', $this->token, $this->address);
+        }
+
+        $resultView = new View($response);
+
+        return $resultView;
+    }
+
+
+    /**
+     * @param       $viewId
+     * @param array $viewData
+     *
+     * @return View
+     */
+    public function editView($viewId, array $viewData = [])
+    {
+        $viewData['id'] = $viewId;
+
+        $view = new View($viewData);
+        $view->validate();
+
+        return $this->saveView($view);
     }
 
 

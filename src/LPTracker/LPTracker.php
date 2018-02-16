@@ -685,10 +685,15 @@ class LPTracker extends LPTrackerBase
             $lead = $lead->getId();
         }
 
+        $url = '/lead/'.$lead.'/funnel';
 
-        $resultLead = $this->editLead($lead, [
-            'funnel' => $newFunnelId,
-        ]);
+        $data = [
+            'funnel' => $newFunnelId
+        ];
+
+        $response = LPTrackerRequest::sendRequest($url, $data, 'PUT', $this->token, $this->address);
+
+        $resultLead = new Lead($response);
 
         return $resultLead;
     }

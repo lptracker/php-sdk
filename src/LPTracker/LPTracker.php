@@ -63,6 +63,8 @@ class LPTracker extends LPTrackerBase
 
     /**
      * @return Project[]
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
      */
     public function getProjectList()
     {
@@ -81,6 +83,8 @@ class LPTracker extends LPTrackerBase
      * @param $id
      *
      * @return Project
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
      */
     public function getProject($id)
     {
@@ -98,6 +102,8 @@ class LPTracker extends LPTrackerBase
      * @param $project
      *
      * @return Custom[]
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
      */
     public function getProjectCustoms($project)
     {
@@ -124,6 +130,8 @@ class LPTracker extends LPTrackerBase
      * @param $project
      *
      * @return ContactField[]
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
      */
     public function getProjectFields($project)
     {
@@ -380,6 +388,8 @@ class LPTracker extends LPTrackerBase
      * @param $newValue
      *
      * @return ContactField
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
      */
     public function updateContactField($contact, $field, $newValue)
     {
@@ -493,6 +503,7 @@ class LPTracker extends LPTrackerBase
      * @param array $viewData
      *
      * @return View
+     * @throws LPTrackerSDKException
      */
     public function editView($viewId, array $viewData = [])
     {
@@ -601,6 +612,7 @@ class LPTracker extends LPTrackerBase
      * @param array $leadData
      *
      * @return Lead
+     * @throws LPTrackerSDKException
      */
     public function editLead($leadId, array $leadData = [])
     {
@@ -661,11 +673,32 @@ class LPTracker extends LPTrackerBase
         return $resultLead;
     }
 
+    /**
+     * @param $lead
+     * @param $newFunnelId
+     * @return Lead
+     * @throws LPTrackerSDKException
+     */
+    public function changeLeadFunnel($lead, $newFunnelId)
+    {
+        if ($lead instanceof Lead) {
+            $lead = $lead->getId();
+        }
+
+
+        $resultLead = $this->editLead($lead, [
+            'funnel' => $newFunnelId,
+        ]);
+
+        return $resultLead;
+    }
 
     /**
      * @param $lead
      *
      * @return Comment[]
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
      */
     public function getLeadComments($lead)
     {
@@ -693,6 +726,8 @@ class LPTracker extends LPTrackerBase
      * @param $text
      *
      * @return Comment
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
      */
     public function addCommentToLead($lead, $text)
     {
@@ -748,6 +783,7 @@ class LPTracker extends LPTrackerBase
      * @param $newValue
      *
      * @return Custom
+     * @throws LPTrackerSDKException
      */
     public function editLeadCustom($lead, $custom, $newValue)
     {

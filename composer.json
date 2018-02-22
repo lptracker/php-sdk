@@ -4,7 +4,7 @@
   "keywords": ["lptracker", "sdk", "php-sdk"],
   "type": "library",
   "homepage": "https://github.com/lptracker/php-sdk",
-  "license": "Apache2",
+  "license": "Apache-2.0",
   "authors": [
     {
       "name": "Andrey Voropaev",

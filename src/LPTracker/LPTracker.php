@@ -596,9 +596,9 @@ class LPTracker extends LPTrackerBase
         if ($lead->getId() > 0) {
             $url = '/lead/'.$lead->getId();
 
-            $response = LPTrackerRequest::sendRequest($url, $lead->toArray(), 'PUT', $this->token, $this->address);
+            $response = LPTrackerRequest::sendRequest($url, $lead->toArray(true), 'PUT', $this->token, $this->address);
         } else {
-            $response = LPTrackerRequest::sendRequest('/lead', $lead->toArray(), 'POST', $this->token, $this->address);
+            $response = LPTrackerRequest::sendRequest('/lead', $lead->toArray(true), 'POST', $this->token, $this->address);
         }
 
         $resultLead = new Lead($response);

@@ -137,9 +137,11 @@ class Lead extends Model
 
 
     /**
+     * @param bool $toSave
+     *
      * @return array
      */
-    public function toArray()
+    public function toArray($toSave = false)
     {
         $result = [
             'contact_id' => $this->contactId,
@@ -175,7 +177,11 @@ class Lead extends Model
             $result['payments'][] = $payment->toArray();
         }
         foreach ($this->getCustoms() as $custom) {
-            $result['custom'][] = $custom->toArray();
+            if ($toSave) {
+                $result['custom'][$custom->getId()] = $custom->getValue();
+            } else {
+                $result['custom'][] = $custom->toArray();
+            }
         }
         foreach ($this->options as $key => $value) {
             $result[$key] = $value;

@@ -32,21 +32,6 @@ class Lead extends Model
     protected $funnelId;
 
     /**
-     * @var string
-     */
-    protected $source;
-
-    /**
-     * @var string
-     */
-    protected $campaign;
-
-    /**
-     * @var string
-     */
-    protected $keyword;
-
-    /**
      * @var View
      */
     protected $view;
@@ -95,15 +80,6 @@ class Lead extends Model
         }
         if ( ! empty($leadData['funnel'])) {
             $this->funnelId = intval($leadData['funnel']);
-        }
-        if ( ! empty($leadData['source'])) {
-            $this->source = $leadData['source'];
-        }
-        if ( ! empty($leadData['campaign'])) {
-            $this->campaign = $leadData['campaign'];
-        }
-        if ( ! empty($leadData['keyword'])) {
-            $this->keyword = $leadData['keyword'];
         }
         if ( ! empty($leadData['view'])) {
             $this->view = new View($leadData['view']);
@@ -154,15 +130,6 @@ class Lead extends Model
         }
         if ( ! empty($this->funnelId)) {
             $result['funnel'] = $this->getFunnelId();
-        }
-        if ( ! empty($this->source)) {
-            $result['source'] = $this->getSource();
-        }
-        if ( ! empty($this->campaign)) {
-            $result['campaign'] = $this->getCampaign();
-        }
-        if ( ! empty($this->keyword)) {
-            $result['keyword'] = $this->getKeyword();
         }
         if ( ! empty($this->ownerId)) {
             $result['owner'] = $this->getOwnerId();
@@ -274,68 +241,6 @@ class Lead extends Model
     public function setFunnelId($funnelId)
     {
         $this->funnelId = intval($funnelId);
-
-        return $this;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-
-    /**
-     * @param string $source
-     *
-     * @return $this
-     */
-    public function setSource($source)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getCampaign()
-    {
-        return $this->campaign;
-    }
-
-
-    /**
-     * @param string $campaign
-     */
-    public function setCampaign($campaign)
-    {
-        $this->campaign = $campaign;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getKeyword()
-    {
-        return $this->keyword;
-    }
-
-
-    /**
-     * @param string $keyword
-     *
-     * @return $this
-     */
-    public function setKeyword($keyword)
-    {
-        $this->keyword = $keyword;
 
         return $this;
     }

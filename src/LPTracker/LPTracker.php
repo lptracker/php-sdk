@@ -53,7 +53,8 @@ class LPTracker extends LPTrackerBase
 
 
     /**
-     *
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
      */
     public function logout()
     {

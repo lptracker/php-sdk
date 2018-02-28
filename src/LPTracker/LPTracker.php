@@ -537,7 +537,7 @@ class LPTracker extends LPTrackerBase
             throw new LPTrackerSDKException('Invalid lead data');
         }
 
-        $data = $lead->toArray();
+        $data = $lead->toArray(true);
         if (isset($options['callback'])) {
             $data['callback'] = $options['callback'] ? true : false;
         }

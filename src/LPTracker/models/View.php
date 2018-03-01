@@ -61,6 +61,9 @@ class View extends Model
         if (isset($viewData['campaign'])) {
             $this->campaign = $viewData['campaign'];
         }
+        if (isset($viewData['keyword'])) {
+            $this->keyword = $viewData['keyword'];
+        }
         if (isset($viewData['seo_system'])) {
             $this->seoSystem = $viewData['seo_system'];
         }

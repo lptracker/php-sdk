@@ -256,6 +256,19 @@ class Lead extends Model
 
 
     /**
+     * @param View $view
+     *
+     * @return $this
+     */
+    public function setView(View $view)
+    {
+        $this->view = $view;
+
+        return $this;
+    }
+
+
+    /**
      * @return Payment[]
      */
     public function getPayments()

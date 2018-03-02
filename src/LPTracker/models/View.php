@@ -41,6 +41,11 @@ class View extends Model
      */
     protected $seoSystem;
 
+    /**
+     * @var array
+     */
+    protected $utmMarks = [];
+
 
     /**
      * View constructor.
@@ -66,6 +71,13 @@ class View extends Model
         }
         if (isset($viewData['seo_system'])) {
             $this->seoSystem = $viewData['seo_system'];
+        }
+        if (isset($viewData['utm'])) {
+            if (is_array($viewData['utm'])) {
+                $this->utmMarks = $viewData['utm'];
+            } else {
+                $this->utmMarks = [ $viewData['utm'] ];
+            }
         }
     }
 
@@ -107,6 +119,9 @@ class View extends Model
         }
         if ( ! empty($this->seoSystem)) {
             $result['seo_system'] = $this->getSeoSystem();
+        }
+        if ( ! empty($this->utmMarks)) {
+            $result['utm'] = $this->getUtmMarks();
         }
 
         return $result;
@@ -214,6 +229,41 @@ class View extends Model
     public function setSeoSystem($seoSystem)
     {
         $this->seoSystem = $seoSystem;
+
+        return $this;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getUtmMarks()
+    {
+        return $this->utmMarks;
+    }
+
+
+    /**
+     * @param array $utmMarks
+     *
+     * @return $this
+     */
+    public function setUtmMarks($utmMarks)
+    {
+        $this->utmMarks = $utmMarks;
+
+        return $this;
+    }
+
+
+    /**
+     * @param $mark
+     *
+     * @return $this
+     */
+    public function addUtmMark($mark)
+    {
+        $this->utmMarks[] = $mark;
 
         return $this;
     }

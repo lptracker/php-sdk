@@ -60,7 +60,11 @@ class LPTrackerRequest
         }
 
         if ( ! empty($body['errors'])) {
-            throw new LPTrackerResponseException($body['errors'][0]);
+            if ( ! empty($body['errors'][0]['message'])) {
+                throw new LPTrackerResponseException($body['errors'][0]['message']);
+            } else {
+                throw new LPTrackerResponseException($body['errors'][0]);
+            }
         }
 
         if (empty($body['status']) || $body['status'] != 'success') {

@@ -543,7 +543,7 @@ class LPTracker extends LPTrackerBase
             $data['callback'] = $options['callback'] ? true : false;
         }
         if (isset($leadData['view_id'])) {
-            $data['view_id'] = intval($leadData['view_id']) ;
+            $data['view_id'] = intval($leadData['view_id']);
         }
 
         $response = LPTrackerRequest::sendRequest('/lead', $data, 'POST', $this->token, $this->address);
@@ -599,7 +599,8 @@ class LPTracker extends LPTrackerBase
 
             $response = LPTrackerRequest::sendRequest($url, $lead->toArray(true), 'PUT', $this->token, $this->address);
         } else {
-            $response = LPTrackerRequest::sendRequest('/lead', $lead->toArray(true), 'POST', $this->token, $this->address);
+            $response = LPTrackerRequest::sendRequest('/lead', $lead->toArray(true), 'POST', $this->token,
+                $this->address);
         }
 
         $resultLead = new Lead($response);
@@ -674,9 +675,11 @@ class LPTracker extends LPTrackerBase
         return $resultLead;
     }
 
+
     /**
      * @param $lead
      * @param $newFunnelId
+     *
      * @return Lead
      * @throws LPTrackerSDKException
      */
@@ -698,6 +701,7 @@ class LPTracker extends LPTrackerBase
 
         return $resultLead;
     }
+
 
     /**
      * @param $lead

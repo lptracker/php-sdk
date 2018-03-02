@@ -538,7 +538,7 @@ class LPTracker extends LPTrackerBase
             throw new LPTrackerSDKException('Invalid lead data');
         }
 
-        if (empty($lead->getView()->getId())) {
+        if ( ! empty($lead->getView()) && empty($lead->getView()->getId())) {
             $contactModel = $this->getContact($contact);
             $viewData = $lead->getView()->toArray();
             $lead->setView($this->createView($contactModel->getProjectId(), $viewData));
@@ -550,7 +550,7 @@ class LPTracker extends LPTrackerBase
         }
         if (isset($leadData['view_id'])) {
             $data['view_id'] = intval($leadData['view_id']);
-        } elseif (!empty($lead->getView()->getId())) {
+        } elseif ( ! empty($lead->getView()) && ! empty($lead->getView()->getId())) {
             $data['view_id'] = $lead->getView()->getId();
         }
 

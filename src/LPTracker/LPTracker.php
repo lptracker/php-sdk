@@ -539,7 +539,9 @@ class LPTracker extends LPTrackerBase
         }
 
         if (empty($lead->getView()->getId())) {
-            $lead->setView($this->saveView($lead->getView()));
+            $contactModel = $this->getContact($contact);
+            $viewData = $lead->getView()->toArray();
+            $lead->setView($this->createView($contactModel->getProjectId(), $viewData));
         }
 
         $data = $lead->toArray(true);
@@ -548,6 +550,8 @@ class LPTracker extends LPTrackerBase
         }
         if (isset($leadData['view_id'])) {
             $data['view_id'] = intval($leadData['view_id']);
+        } elseif (!empty($lead->getView()->getId())) {
+            $data['view_id'] = $lead->getView()->getId();
         }
 
         $response = LPTrackerRequest::sendRequest('/lead', $data, 'POST', $this->token, $this->address);

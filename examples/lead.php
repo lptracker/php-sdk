@@ -37,6 +37,13 @@ $leadData = [
     'owner'  => 0
 ];
 
+// Указание источника (необязательно)
+$leadData['view'] = [
+    'source'   => 'yandex',
+    'campaign' => 'sale-up',
+    'keyword'  => 'wood',
+];
+
 $options = [
     'callback' => false
 ];

@@ -28,27 +28,27 @@ abstract class LPTrackerBase
     const DEFAULT_SERVICE_NAME = 'api (sdk)';
 
     /**
-     * Ключь переменной окружения логина/email главного аккаунта
+     * Ключ переменной окружения логина/email главного аккаунта
      */
     const LOGIN_ENV_NAME = 'LPTRACKER_LOGIN';
 
     /**
-     * Ключь переменной окружения пароля главного аккаунта
+     * Ключ переменной окружения пароля главного аккаунта
      */
     const PASSWORD_ENV_NAME = 'LPTRACKER_PASSWORD';
 
     /**
-     * Ключь переменной окружения имени сервиса
+     * Ключ переменной окружения имени сервиса
      */
     const SERVICE_NAME_ENV_NAME = 'LPTRACKER_SERVICE_NAME';
 
     /**
-     * Ключь переменной окружения access token от системы если уже есть
+     * Ключ переменной окружения access token от системы если уже есть
      */
     const TOKEN_ENV_NAME = 'LPTRACKER_TOKEN';
 
     /**
-     * Ключь переменной окружения адреса апи
+     * Ключ переменной окружения адреса апи
      */
     const ADDRESS_ENV_NAME = 'LPTRACKER_ADDRESS';
 

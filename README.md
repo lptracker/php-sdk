@@ -73,4 +73,7 @@ $options = [
 ];
 
 $lead = $api->createLead($contact, $leadData, $options);
+
+// Установить функцию обратного вызова
+$api->setProjectCallbackUrl($projects[0]->getId(), 'http://mysite.ru/webhook/handler');
 ```

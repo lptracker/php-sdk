@@ -154,6 +154,26 @@ class LPTracker extends LPTrackerBase
         return $result;
     }
 
+    /**
+     * @param $project
+     * @param $callbackUrl
+     *
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
+     * @author Yuri Nazarenko / rezident <m@rezident.org>
+     */
+    public function setProjectCallbackUrl($project, $callbackUrl)
+    {
+        if($project instanceof Project) {
+            $project = $project->getId();
+        } else {
+            $project = intval($project);
+        }
+
+        $url = '/project/' . $project . '/callback-url';
+        LPTrackerRequest::sendRequest($url, ['url' => $callbackUrl], 'PUT', $this->token, $this->address);
+    }
+
 
     /**
      * @param       $project

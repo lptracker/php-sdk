@@ -788,6 +788,36 @@ class LPTracker extends LPTrackerBase
         return $comment;
     }
 
+    /**
+     * @param Lead|int   $lead
+     * @param Custom|int $custom
+     * @param string     $absolutePath
+     *
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
+     *
+     * @author Yuri Nazarenko / rezident <m@rezident.org>
+     */
+    public function addFileToLead($lead, $custom, $absolutePath)
+    {
+        $leadId = $lead instanceof Lead
+            ? $lead->getId()
+            : (int)$lead;
+
+        $customId = $custom instanceof Custom
+            ? $custom->getId()
+            : (int)$custom;
+
+        $url = '/lead/' . $leadId . '/file';
+        $data = [
+            'name'            => pathinfo($absolutePath, PATHINFO_BASENAME),
+            'mime'            => mime_content_type($absolutePath),
+            'data'            => base64_encode(file_get_contents($absolutePath)),
+            'custom_field_id' => $customId
+        ];
+
+        LPTrackerRequest::sendRequest($url, $data, 'POST', $this->token, $this->address);
+    }
 
     /**
      * @param Custom $custom

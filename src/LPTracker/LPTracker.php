@@ -879,4 +879,37 @@ class LPTracker extends LPTrackerBase
 
         return $this->saveLeadCustom($customModel);
     }
+
+    /**
+     * @param Project|int $project
+     *
+     * @param int         $offset
+     * @param int         $limit
+     * @param array       $sort
+     *
+     * @return Lead[]
+     *
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
+     * @author Yuri Nazarenko / rezident <m@rezident.org>
+     */
+    public function getLeadsList($project, $offset = null, $limit = null, $sort = [])
+    {
+        $projectId = $project instanceof Project ? $project->getId() : (int)$project;
+
+        $actionUrl = '/lead/' . $projectId . '/list?' . http_build_query([
+                'offset' => $offset,
+                'limit'  => $limit,
+                'sort' => $sort
+            ]);
+
+        $response = LPTrackerRequest::sendRequest($actionUrl, [], 'GET', $this->token, $this->address);
+
+        $result = [];
+        foreach ($response as $lead) {
+            $result[] = new Lead($lead);
+        }
+
+        return $result;
+    }
 }

@@ -81,6 +81,9 @@ class Lead extends Model
         if ( ! empty($leadData['funnel'])) {
             $this->funnelId = intval($leadData['funnel']);
         }
+        if ( ! empty($leadData['stage_id'])) {
+            $this->funnelId = intval($leadData['stage_id']);
+        }
         if ( ! empty($leadData['view'])) {
             $this->view = new View($leadData['view']);
         }
@@ -101,6 +104,10 @@ class Lead extends Model
         }
         if ( ! empty($leadData['lead_date'])) {
             $date = \DateTime::createFromFormat('d.m.Y H:i', $leadData['lead_date']);
+            $this->setCreatedAt($date);
+        }
+        if ( ! empty($leadData['created_at'])) {
+            $date = \DateTime::createFromFormat('d.m.Y H:i', $leadData['created_at']);
             $this->setCreatedAt($date);
         }
         if ( ! empty($leadData['deal_date'])) {

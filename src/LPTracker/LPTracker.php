@@ -886,6 +886,7 @@ class LPTracker extends LPTrackerBase
      * @param int         $offset
      * @param int         $limit
      * @param array       $sort
+     * @param bool        $isDeal
      *
      * @return Lead[]
      *
@@ -893,14 +894,15 @@ class LPTracker extends LPTrackerBase
      * @throws exceptions\LPTrackerServerException
      * @author Yuri Nazarenko / rezident <m@rezident.org>
      */
-    public function getLeadsList($project, $offset = null, $limit = null, $sort = [])
+    public function getLeadsList($project, $offset = null, $limit = null, $sort = [], $isDeal = false)
     {
         $projectId = $project instanceof Project ? $project->getId() : (int)$project;
 
         $actionUrl = '/lead/' . $projectId . '/list?' . http_build_query([
-                'offset' => $offset,
-                'limit'  => $limit,
-                'sort' => $sort
+                'offset'  => $offset,
+                'limit'   => $limit,
+                'sort'    => $sort,
+                'is_deal' => $isDeal
             ]);
 
         $response = LPTrackerRequest::sendRequest($actionUrl, [], 'GET', $this->token, $this->address);

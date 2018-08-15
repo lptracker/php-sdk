@@ -6,6 +6,7 @@ use LPTracker\models\Comment;
 use LPTracker\models\Contact;
 use LPTracker\models\ContactField;
 use LPTracker\models\Custom;
+use LPTracker\models\CustomField;
 use LPTracker\models\Lead;
 use LPTracker\models\Project;
 use LPTracker\exceptions\LPTrackerSDKException;
@@ -878,6 +879,26 @@ class LPTracker extends LPTrackerBase
         $customModel->validate();
 
         return $this->saveLeadCustom($customModel);
+    }
+
+    /**
+     * @param Project|int $project
+     * @param array $options
+     *
+     * @return CustomField
+     *
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
+     *
+     * @author Yuri Nazarenko / rezident <m@rezident.org>
+     */
+    public function createCustom($project, $options)
+    {
+        $projectId = $project instanceof Project ? $project->getId() : (int)$project;
+        $actionUrl = '/custom/' . $projectId . '/create';
+        $response = LPTrackerRequest::sendRequest($actionUrl, $options, 'POST', $this->token, $this->address);
+
+        return new CustomField($response);
     }
 
     /**

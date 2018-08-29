@@ -90,7 +90,7 @@ class LPTracker extends LPTrackerBase
      */
     public function getProject($id)
     {
-        $url = '/project/'.$id;
+        $url = '/project/' . $id;
 
         $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
 
@@ -115,7 +115,7 @@ class LPTracker extends LPTrackerBase
             $project = intval($project);
         }
 
-        $url = '/project/'.$project.'/customs';
+        $url = '/project/' . $project . '/customs';
 
         $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
 
@@ -143,7 +143,7 @@ class LPTracker extends LPTrackerBase
             $project = intval($project);
         }
 
-        $url = '/project/'.$project.'/fields';
+        $url = '/project/' . $project . '/fields';
 
         $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
 
@@ -165,7 +165,7 @@ class LPTracker extends LPTrackerBase
      */
     public function setProjectCallbackUrl($project, $callbackUrl)
     {
-        if($project instanceof Project) {
+        if ($project instanceof Project) {
             $project = $project->getId();
         } else {
             $project = intval($project);
@@ -246,7 +246,7 @@ class LPTracker extends LPTrackerBase
             throw new LPTrackerSDKException('Invalid contact ID');
         }
 
-        $url = '/contact/'.$contact;
+        $url = '/contact/' . $contact;
 
         $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
 
@@ -264,12 +264,12 @@ class LPTracker extends LPTrackerBase
      */
     public function saveContact(Contact $contact)
     {
-        if ( ! $contact->validate()) {
+        if (!$contact->validate()) {
             throw new LPTrackerSDKException('Invalid contact');
         }
 
         $data = $contact->toArray();
-        if ( ! empty($data['fields'])) {
+        if (!empty($data['fields'])) {
             $fields = [];
             foreach ($data['fields'] as $field) {
                 $fields[$field['id']] = $field['value'];
@@ -278,7 +278,7 @@ class LPTracker extends LPTrackerBase
         }
 
         if ($contact->getId() > 0) {
-            $url = '/contact/'.$contact->getId();
+            $url = '/contact/' . $contact->getId();
 
             $response = LPTrackerRequest::sendRequest($url, $contact->toArray(), 'PUT', $this->token, $this->address);
         } else {
@@ -362,7 +362,7 @@ class LPTracker extends LPTrackerBase
             $data['phone'] = $searchOptions['phone'];
         }
 
-        $url = $url.http_build_query($data);
+        $url = $url . http_build_query($data);
 
         $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
 
@@ -391,7 +391,7 @@ class LPTracker extends LPTrackerBase
             throw new LPTrackerSDKException('Invalid contact id');
         }
 
-        $url = '/contact/'.$contact.'/leads';
+        $url = '/contact/' . $contact . '/leads';
 
         $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
 
@@ -422,7 +422,7 @@ class LPTracker extends LPTrackerBase
             $field = $field->getId();
         }
 
-        $url = '/contact/'.$contact.'/field/'.$field;
+        $url = '/contact/' . $contact . '/field/' . $field;
 
         $data = [
             'value' => $newValue
@@ -452,7 +452,7 @@ class LPTracker extends LPTrackerBase
         }
 
         $view = new View($viewData);
-        if ( ! $view->validate()) {
+        if (!$view->validate()) {
             throw new LPTrackerSDKException('Invalid view data');
         }
 
@@ -484,7 +484,7 @@ class LPTracker extends LPTrackerBase
             throw new LPTrackerSDKException('Invalid view ID');
         }
 
-        $url = '/view/'.$view;
+        $url = '/view/' . $view;
 
         $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
 
@@ -502,12 +502,12 @@ class LPTracker extends LPTrackerBase
      */
     public function saveView(View $view)
     {
-        if ( ! $view->validate()) {
+        if (!$view->validate()) {
             throw new LPTrackerSDKException('Invalid view');
         }
 
         if ($view->getId() > 0) {
-            $url = '/view/'.$view->getId();
+            $url = '/view/' . $view->getId();
 
             $response = LPTrackerRequest::sendRequest($url, $view->toArray(), 'PUT', $this->token, $this->address);
         } else {
@@ -555,11 +555,11 @@ class LPTracker extends LPTrackerBase
         }
 
         $lead = new Lead($leadData);
-        if ( ! $lead->validate()) {
+        if (!$lead->validate()) {
             throw new LPTrackerSDKException('Invalid lead data');
         }
 
-        if ( ! empty($lead->getView()) && empty($lead->getView()->getId())) {
+        if (!empty($lead->getView()) && empty($lead->getView()->getId())) {
             $contactModel = $this->getContact($contact);
             $viewData = $lead->getView()->toArray();
             $lead->setView($this->createView($contactModel->getProjectId(), $viewData));
@@ -571,7 +571,7 @@ class LPTracker extends LPTrackerBase
         }
         if (isset($leadData['view_id'])) {
             $data['view_id'] = intval($leadData['view_id']);
-        } elseif ( ! empty($lead->getView()) && ! empty($lead->getView()->getId())) {
+        } else if (!empty($lead->getView()) && !empty($lead->getView()->getId())) {
             $data['view_id'] = $lead->getView()->getId();
         }
 
@@ -601,7 +601,7 @@ class LPTracker extends LPTrackerBase
             throw new LPTrackerSDKException('Invalid lead ID');
         }
 
-        $url = '/lead/'.$lead;
+        $url = '/lead/' . $lead;
 
         $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
 
@@ -619,12 +619,12 @@ class LPTracker extends LPTrackerBase
      */
     public function saveLead(Lead $lead)
     {
-        if ( ! $lead->validate()) {
+        if (!$lead->validate()) {
             throw new LPTrackerSDKException('Invalid lead');
         }
 
         if ($lead->getId() > 0) {
-            $url = '/lead/'.$lead->getId();
+            $url = '/lead/' . $lead->getId();
 
             $response = LPTrackerRequest::sendRequest($url, $lead->toArray(true), 'PUT', $this->token, $this->address);
         } else {
@@ -689,7 +689,7 @@ class LPTracker extends LPTrackerBase
             throw new LPTrackerSDKException('Invalid lead ID');
         }
 
-        $url = '/lead/'.$lead.'/payment';
+        $url = '/lead/' . $lead . '/payment';
 
         $data = [
             'category' => $category,
@@ -718,7 +718,7 @@ class LPTracker extends LPTrackerBase
             $lead = $lead->getId();
         }
 
-        $url = '/lead/'.$lead.'/funnel';
+        $url = '/lead/' . $lead . '/funnel';
 
         $data = [
             'funnel' => $newFunnelId
@@ -747,7 +747,7 @@ class LPTracker extends LPTrackerBase
             $lead = intval($lead);
         }
 
-        $url = '/lead/'.$lead.'/comments';
+        $url = '/lead/' . $lead . '/comments';
 
         $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
 
@@ -776,7 +776,7 @@ class LPTracker extends LPTrackerBase
             $lead = intval($lead);
         }
 
-        $url = '/lead/'.$lead.'/comment';
+        $url = '/lead/' . $lead . '/comment';
 
         $data = [
             'text' => $text
@@ -828,11 +828,11 @@ class LPTracker extends LPTrackerBase
      */
     public function saveLeadCustom(Custom $custom)
     {
-        if ( ! $custom->validate() || empty($custom->getLeadId())) {
+        if (!$custom->validate() || empty($custom->getLeadId())) {
             throw new LPTrackerSDKException('Invalid custom');
         }
 
-        $url = '/lead/'.$custom->getLeadId().'/custom/'.$custom->getId();
+        $url = '/lead/' . $custom->getLeadId() . '/custom/' . $custom->getId();
 
         $data = [
             'value' => $custom->getValue()
@@ -883,7 +883,7 @@ class LPTracker extends LPTrackerBase
 
     /**
      * @param Project|int $project
-     * @param array $options
+     * @param array       $options
      *
      * @return CustomField
      *
@@ -908,6 +908,7 @@ class LPTracker extends LPTrackerBase
      * @param int         $limit
      * @param array       $sort
      * @param bool        $isDeal
+     * @param array       $filter
      *
      * @return Lead[]
      *
@@ -915,7 +916,7 @@ class LPTracker extends LPTrackerBase
      * @throws exceptions\LPTrackerServerException
      * @author Yuri Nazarenko / rezident <m@rezident.org>
      */
-    public function getLeadsList($project, $offset = null, $limit = null, $sort = [], $isDeal = false)
+    public function getLeadsList($project, $offset = null, $limit = null, $sort = [], $isDeal = false, $filter = [])
     {
         $projectId = $project instanceof Project ? $project->getId() : (int)$project;
 
@@ -923,7 +924,8 @@ class LPTracker extends LPTrackerBase
                 'offset'  => $offset,
                 'limit'   => $limit,
                 'sort'    => $sort,
-                'is_deal' => $isDeal
+                'is_deal' => $isDeal,
+                'filter'  => $filter
             ]);
 
         $response = LPTrackerRequest::sendRequest($actionUrl, [], 'GET', $this->token, $this->address);

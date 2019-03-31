@@ -4,13 +4,8 @@ namespace LPTracker\models;
 
 use LPTracker\exceptions\LPTrackerSDKException;
 
-/**
- * Class Project
- * @package LPTracker\models
- */
 class Project extends Model
 {
-
     /**
      * @var integer
      */
@@ -31,12 +26,6 @@ class Project extends Model
      */
     protected $domain;
 
-
-    /**
-     * Project constructor.
-     *
-     * @param array $projectData
-     */
     public function __construct(array $projectData = [])
     {
         if (isset($projectData['id'])) {
@@ -53,7 +42,6 @@ class Project extends Model
         }
     }
 
-
     /**
      * @return bool
      * @throws LPTrackerSDKException
@@ -63,6 +51,7 @@ class Project extends Model
         if (empty($this->id)) {
             throw new LPTrackerSDKException('Project ID is required');
         }
+
         if (empty($this->name)) {
             throw new LPTrackerSDKException('Project name is required');
         }
@@ -70,29 +59,26 @@ class Project extends Model
         return true;
     }
 
-
     /**
      * @return array
      */
     public function toArray()
     {
         return [
-            'id'     => $this->getId(),
-            'name'   => $this->getName(),
-            'page'   => $this->getPage(),
-            'domain' => $this->getDomain()
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'page' => $this->getPage(),
+            'domain' => $this->getDomain(),
         ];
     }
-
 
     /**
      * @return int
      */
     public function getId()
     {
-        return intval($this->id);
+        return (int) $this->id;
     }
-
 
     /**
      * @return string
@@ -102,7 +88,6 @@ class Project extends Model
         return $this->name;
     }
 
-
     /**
      * @return string
      */
@@ -110,7 +95,6 @@ class Project extends Model
     {
         return $this->page;
     }
-
 
     /**
      * @return string

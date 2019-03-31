@@ -4,13 +4,8 @@ namespace LPTracker\models;
 
 use LPTracker\exceptions\LPTrackerSDKException;
 
-/**
- * Class Custom
- * @package LPTracker\models
- */
 class Custom extends Model
 {
-
     /**
      * @var integer
      */
@@ -36,25 +31,22 @@ class Custom extends Model
      */
     protected $value;
 
-
     /**
-     * Custom constructor.
-     *
-     * @param array   $customData
-     * @param integer $leadId
+     * @param array $customData
+     * @param int $leadId
      */
     public function __construct(array $customData = [], $leadId = 0)
     {
-        if ( ! empty($customData['id'])) {
+        if (!empty($customData['id'])) {
             $this->id = $customData['id'];
         }
-        if ( ! empty($customData['type'])) {
+        if (!empty($customData['type'])) {
             $this->type = $customData['type'];
         }
-        if ( ! empty($customData['name'])) {
+        if (!empty($customData['name'])) {
             $this->name = $customData['name'];
         }
-        if ( ! empty($customData['value'])) {
+        if (!empty($customData['value'])) {
             $this->value = $customData['value'];
         }
         if ($leadId > 0) {
@@ -62,29 +54,25 @@ class Custom extends Model
         }
     }
 
-
     /**
      * @return array
      */
     public function toArray()
     {
         $result = [
-            'id' => $this->id
+            'id' => $this->id,
         ];
-
-        if ( ! empty($this->type)) {
+        if (!empty($this->type)) {
             $result['type'] = $this->type;
         }
-        if ( ! empty($this->name)) {
+        if (!empty($this->name)) {
             $result['name'] = $this->name;
         }
-        if ( ! empty($this->value)) {
+        if (!empty($this->value)) {
             $result['value'] = $this->value;
         }
-
         return $result;
     }
-
 
     /**
      * @return bool
@@ -99,15 +87,13 @@ class Custom extends Model
         return true;
     }
 
-
     /**
      * @return int
      */
     public function getId()
     {
-        return intval($this->id);
+        return (int) $this->id;
     }
-
 
     /**
      * @return string
@@ -117,7 +103,6 @@ class Custom extends Model
         return $this->type;
     }
 
-
     /**
      * @return string
      */
@@ -126,19 +111,15 @@ class Custom extends Model
         return $this->name;
     }
 
-
     /**
      * @param int $leadId
-     *
      * @return $this
      */
     public function setLeadId($leadId)
     {
         $this->leadId = $leadId;
-
         return $this;
     }
-
 
     /**
      * @return int
@@ -148,7 +129,6 @@ class Custom extends Model
         return $this->leadId;
     }
 
-
     /**
      * @return mixed
      */
@@ -157,16 +137,13 @@ class Custom extends Model
         return $this->value;
     }
 
-
     /**
      * @param mixed $value
-     *
      * @return $this
      */
     public function setValue($value)
     {
         $this->value = $value;
-
         return $this;
     }
 }

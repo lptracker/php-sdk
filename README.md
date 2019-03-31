@@ -1,13 +1,12 @@
-# php-sdk
 <img src="readme_media/logo.png" width="400"/>
 
-PHP SDK для работы с Api платформы LPTracker.
+# PHP SDK для работы с API платформы LPTracker.
 
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/lptracker/php-sdk/badges/quality-score.png)](https://scrutinizer-ci.com/g/lptracker/php-sdk/)
 
 [![Latest Stable Version](https://poser.pugx.org/lptracker/php-sdk/v/stable)](https://packagist.org/packages/lptracker/php-sdk) [![Total Downloads](https://poser.pugx.org/lptracker/php-sdk/downloads)](https://packagist.org/packages/lptracker/php-sdk) [![License](https://poser.pugx.org/lptracker/php-sdk/license)](https://packagist.org/packages/lptracker/php-sdk)
 
-**Документация по api доступна здесь [http://docs.direct.lptracker.ru](http://docs.direct.lptracker.ru).**
+**Документация по API доступна здесь [http://docs.direct.lptracker.ru](http://docs.direct.lptracker.ru).**
 
 ## Что оно умеет?
 
@@ -18,9 +17,9 @@ PHP SDK для работы с Api платформы LPTracker.
 * Обработка полей конструктора
 
 
-## Подключение sdk
+## Подключение SDK
 
-##### Установка через [Composer](https://getcomposer.org/)
+#### Установка через [Composer](https://getcomposer.org/)
 
 ```
 composer require lptracker/php-sdk
@@ -36,42 +35,35 @@ require_once 'vendor/autoload.php';
 use LPTracker\LPTracker;
 
 $api = new LPTracker([
-    'login'    => 'andyhwp32@gmail.com',
-    'password' => 'tEXyLH2W',
-    'service'  => 'testService'
+    'login' => 'user@example.com',
+    'password' => 'yourPassword',
+    'service' => 'testService',
 ]);
-
-//Получить список проектов
 $projects = $api->getProjectList();
-
 foreach ($projects as $project) {
-    echo $project->__toString()."\n";
+    echo $project . "\n";
 }
 
 $details = [
     [
         'type' => 'email',
-        'data' => 'contact@example.com'
-    ]
+        'data' => 'contact@example.com',
+    ],
 ];
-
 $contactData = [
-    'name'       => 'Максим',
+    'name' => 'Максим',
     'profession' => 'повар',
-    'site'       => 'somecontactsite.ru'
+    'site' => 'somecontactsite.ru',
 ];
-
 $contact = $api->createContact($projects[0]->getId(), $details, $contactData);
 
 $leadData = [
     'name' => 'Макс',
-    'source' => 'Sdk'
+    'source' => 'SDK',
 ];
-
 $options = [
-    'callback' => false
+    'callback' => false,
 ];
-
 $lead = $api->createLead($contact, $leadData, $options);
 
 // Установить функцию обратного вызова

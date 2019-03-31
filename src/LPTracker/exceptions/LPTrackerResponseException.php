@@ -2,19 +2,10 @@
 
 namespace LPTracker\exceptions;
 
-use Throwable;
-
-/**
- * Class LPTrackerResponseException
- * @package LPTracker\exceptions
- */
 class LPTrackerResponseException extends LPTrackerSDKException
 {
-
     /**
-     * LPTrackerResponseException constructor.
-     *
-     * @param string $responseError
+     * @param array|string $responseError
      */
     public function __construct($responseError)
     {

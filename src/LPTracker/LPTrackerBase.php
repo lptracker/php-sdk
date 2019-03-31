@@ -5,13 +5,8 @@ namespace LPTracker;
 use LPTracker\authentication\AccessToken;
 use LPTracker\exceptions\LPTrackerSDKException;
 
-/**
- * Class LPTracker
- * @package LPTracker
- */
 abstract class LPTrackerBase
 {
-
     /**
      * Версия апи
      */
@@ -67,42 +62,42 @@ abstract class LPTrackerBase
      */
     protected $config = [];
 
-
     /**
-     * LPTracker constructor.
-     *
      * @param array $config
-     *
      * @throws LPTrackerSDKException
      */
     public function __construct(array $config = [])
     {
-        $config = array_merge([
-            'login'    => getenv(static::LOGIN_ENV_NAME),
-            'password' => getenv(static::PASSWORD_ENV_NAME),
-            'service'  => getenv(static::SERVICE_NAME_ENV_NAME),
-            'token'    => getenv(static::TOKEN_ENV_NAME),
-            'address'  => getenv(static::ADDRESS_ENV_NAME),
-        ], $config);
-
+        $config = array_merge(
+            [
+                'login' => getenv(static::LOGIN_ENV_NAME),
+                'password' => getenv(static::PASSWORD_ENV_NAME),
+                'service' => getenv(static::SERVICE_NAME_ENV_NAME),
+                'token' => getenv(static::TOKEN_ENV_NAME),
+                'address' => getenv(static::ADDRESS_ENV_NAME),
+            ],
+            $config
+        );
         if (empty($config['token'])) {
             if (empty($config['login'])) {
-                throw new LPTrackerSDKException('Required "login" key not supplied in config and could not find fallback environment variable "'.static::LOGIN_ENV_NAME.'"');
+                throw new LPTrackerSDKException(
+                    'Required "login" key not supplied in config and could not find fallback environment variable "' . static::LOGIN_ENV_NAME . '"'
+                );
             }
+
             if (empty($config['password'])) {
-                throw new LPTrackerSDKException('Required "password" key not supplied in config and could not find fallback environment variable "'.static::PASSWORD_ENV_NAME.'"');
+                throw new LPTrackerSDKException(
+                    'Required "password" key not supplied in config and could not find fallback environment variable "' . static::PASSWORD_ENV_NAME . '"'
+                );
             }
         }
-
         if (empty($config['address'])) {
             $config['address'] = self::DEFAULT_ADDRESS;
         }
         if (empty($config['service'])) {
             $config['service'] = self::DEFAULT_SERVICE_NAME;
         }
-
         $this->config = $config;
-
         $this->address = $config['address'];
         if (empty($config['token'])) {
             $this->token = $this->login($config['login'], $config['password'], $config['service']);
@@ -110,7 +105,6 @@ abstract class LPTrackerBase
             $this->token = new AccessToken($config['token']);
         }
     }
-
 
     /**
      * @return string
@@ -120,10 +114,8 @@ abstract class LPTrackerBase
         return $this->token->getValue();
     }
 
-
     /**
      * @param $token
-     *
      * @return $this
      * @throws LPTrackerSDKException
      */
@@ -136,16 +128,13 @@ abstract class LPTrackerBase
         } else {
             throw new LPTrackerSDKException('Invalid token');
         }
-
         return $this;
     }
 
-
     /**
-     * @param        $login
-     * @param        $password
+     * @param string $login
+     * @param string $password
      * @param string $serviceName
-     *
      * @return mixed
      */
     abstract public function login($login, $password, $serviceName = '');

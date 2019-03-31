@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: andy
- * Date: 19.06.17
- * Time: 17:55
- */
 
 namespace LPTracker\models;
 
@@ -12,13 +6,9 @@ use LPTracker\exceptions\LPTrackerSDKException;
 
 class ContactField extends Model
 {
-
     const TYPE_STRING = 'string';
-
     const TYPE_TEXT = 'text';
-
     const TYPE_DATE = 'date';
-
     const TYPE_NUMBER = 'number';
 
     /**
@@ -46,12 +36,6 @@ class ContactField extends Model
      */
     protected $value;
 
-
-    /**
-     * ContactField constructor.
-     *
-     * @param array $fieldData
-     */
     public function __construct(array $fieldData = [])
     {
         if (isset($fieldData['id'])) {
@@ -71,21 +55,6 @@ class ContactField extends Model
         }
     }
 
-
-    /**
-     * @return bool
-     * @throws LPTrackerSDKException
-     */
-    public function validate()
-    {
-        if (empty($this->id)) {
-            throw new LPTrackerSDKException('Field id can not be null: '.$this->__toString());
-        }
-
-        return true;
-    }
-
-
     /**
      * @return array
      */
@@ -95,10 +64,22 @@ class ContactField extends Model
             self::TYPE_STRING,
             self::TYPE_TEXT,
             self::TYPE_DATE,
-            self::TYPE_NUMBER
+            self::TYPE_NUMBER,
         ];
     }
 
+    /**
+     * @return bool
+     * @throws LPTrackerSDKException
+     */
+    public function validate()
+    {
+        if (empty($this->id)) {
+            throw new LPTrackerSDKException('Field id can not be null: ' . $this->__toString());
+        }
+
+        return true;
+    }
 
     /**
      * @return array
@@ -106,18 +87,15 @@ class ContactField extends Model
     public function toArray()
     {
         $result = [
-            'id'   => $this->id,
+            'id' => $this->id,
             'name' => $this->name,
-            'type' => $this->type
+            'type' => $this->type,
         ];
-
-        if ( ! empty($this->value)) {
+        if (!empty($this->value)) {
             $result['value'] = $this->getValue();
         }
-
         return $result;
     }
-
 
     /**
      * @return int
@@ -127,7 +105,6 @@ class ContactField extends Model
         return $this->id;
     }
 
-
     /**
      * @return string
      */
@@ -135,7 +112,6 @@ class ContactField extends Model
     {
         return $this->name;
     }
-
 
     /**
      * @return string
@@ -145,7 +121,6 @@ class ContactField extends Model
         return $this->type;
     }
 
-
     /**
      * @return mixed
      */
@@ -154,16 +129,13 @@ class ContactField extends Model
         return $this->value;
     }
 
-
     /**
      * @param mixed $value
-     *
      * @return $this
      */
     public function setValue($value)
     {
         $this->value = $value;
-
         return $this;
     }
 }

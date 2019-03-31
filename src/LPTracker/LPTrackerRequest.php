@@ -8,20 +8,14 @@ use LPTracker\authentication\AccessToken;
 use LPTracker\exceptions\LPTrackerResponseException;
 use LPTracker\exceptions\LPTrackerServerException;
 
-/**
- * Class LPTrackerRequest
- * @package LPTracker
- */
 class LPTrackerRequest
 {
-
     /**
-     * @param                    $actionUrl
-     * @param array              $data
-     * @param string             $method
-     * @param AccessToken | null $token
-     * @param string             $baseUrl
-     *
+     * @param string $actionUrl
+     * @param array $data
+     * @param string $method
+     * @param AccessToken|null $token
+     * @param string $baseUrl
      * @return mixed
      * @throws LPTrackerResponseException
      * @throws LPTrackerServerException
@@ -36,38 +30,32 @@ class LPTrackerRequest
         if (empty($baseUrl)) {
             $baseUrl = LPTrackerBase::DEFAULT_ADDRESS;
         }
-
-        $url = $baseUrl.$actionUrl;
-
+        $url = $baseUrl . $actionUrl;
         $curl = new cURL();
         $request = $curl->newRequest($method, $url, $data, Request::ENCODING_JSON);
         $request->setHeader('Content-Type', 'application/json');
-
         if ($token instanceof AccessToken) {
             $request->setHeader('token', $token->getValue());
         }
-
         $response = $request->send();
-
         if ($response === false) {
             throw new LPTrackerServerException('Can`t get response from server');
         }
 
         $body = json_decode($response->body, true);
-
         if ($body === false) {
             throw new LPTrackerServerException('Can`t decode response');
         }
 
-        if ( ! empty($body['errors'])) {
-            if ( ! empty($body['errors'][0]['message'])) {
+        if (!empty($body['errors'])) {
+            if (!empty($body['errors'][0]['message'])) {
                 throw new LPTrackerResponseException($body['errors'][0]['message']);
-            } else {
-                throw new LPTrackerResponseException($body['errors'][0]);
             }
+
+            throw new LPTrackerResponseException($body['errors'][0]);
         }
 
-        if (empty($body['status']) || $body['status'] != 'success') {
+        if (empty($body['status']) || $body['status'] !== 'success') {
             throw new LPTrackerResponseException('Unknown response error');
         }
 

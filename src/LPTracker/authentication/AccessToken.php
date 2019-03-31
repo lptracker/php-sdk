@@ -2,13 +2,8 @@
 
 namespace LPTracker\authentication;
 
-/**
- * Class AccessToken
- * @package LPTracker\authentication
- */
 class AccessToken
 {
-
     /**
      * @var string
      */
@@ -19,11 +14,8 @@ class AccessToken
      */
     protected $expiresAt;
 
-
     /**
-     * AccessToken constructor.
-     *
-     * @param     $accessToken
+     * @param string $accessToken
      * @param int $expiresAt
      */
     public function __construct($accessToken, $expiresAt = 0)
@@ -36,13 +28,19 @@ class AccessToken
         }
     }
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getValue();
+    }
 
     public function resetExpiresAt()
     {
         $this->expiresAt = new \DateTime();
         $this->expiresAt->modify('+1 day');
     }
-
 
     /**
      * @return \DateTime|null
@@ -52,9 +50,8 @@ class AccessToken
         return $this->expiresAt;
     }
 
-
     /**
-     * @return boolean|null
+     * @return bool|null
      */
     public function isExpired()
     {
@@ -65,7 +62,6 @@ class AccessToken
         return null;
     }
 
-
     /**
      * @return string
      */
@@ -73,16 +69,6 @@ class AccessToken
     {
         return $this->value;
     }
-
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getValue();
-    }
-
 
     /**
      * @param int $timeStamp

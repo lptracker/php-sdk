@@ -1,35 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: andy
- * Date: 29.05.17
- * Time: 19:26
- */
 
 namespace LPTracker\models;
 
 use LPTracker\exceptions\LPTrackerSDKException;
 
-/**
- * Class Model
- * @package LPTracker\models
- */
 abstract class Model
 {
-
-    /**
-     * @return array
-     */
-    abstract public function toArray();
-
-
-    /**
-     * @return bool
-     * @throws LPTrackerSDKException
-     */
-    abstract public function validate();
-
-
     /**
      * @return string
      */
@@ -37,4 +13,15 @@ abstract class Model
     {
         return json_encode($this->toArray());
     }
+
+    /**
+     * @return array
+     */
+    abstract public function toArray();
+
+    /**
+     * @return bool
+     * @throws LPTrackerSDKException
+     */
+    abstract public function validate();
 }

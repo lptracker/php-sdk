@@ -59,6 +59,6 @@ class LPTrackerRequest
             throw new LPTrackerResponseException('Unknown response error');
         }
 
-        return $body['result'];
+        return isset($body['result']) ? $body['result'] : null;
     }
 }

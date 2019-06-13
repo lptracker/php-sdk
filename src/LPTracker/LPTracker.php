@@ -518,6 +518,31 @@ class LPTracker extends LPTrackerBase
     }
 
     /**
+     * @param Lead|int $lead
+     * @return LeadFile
+     * @throws LPTrackerSDKException
+     */
+    public function getLeadFile($lead, $fileId)
+    {
+        if ($lead instanceof Lead) {
+            $lead = $lead->getId();
+        } else {
+            $lead = (int) $lead;
+        }
+        if ($lead <= 0) {
+            throw new LPTrackerSDKException('Invalid lead ID');
+        }
+        $fileId = (int)$fileId;
+        if ($fileId <= 0) {
+            throw new LPTrackerSDKException('Invalid file ID');
+        }
+
+        $url = '/lead/' . $lead . '/file/' . $fileId;
+        $response = LPTrackerRequest::sendRequest($url, [], 'GET', $this->token, $this->address);
+        return new LeadFile($response);
+    }
+
+    /**
      * @param Lead $lead
      * @return Lead
      * @throws LPTrackerSDKException

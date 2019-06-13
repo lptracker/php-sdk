@@ -22,7 +22,7 @@ class LeadFile extends Model
             $this->id = (int) $fileData['id'];
         }
         if (!empty($fileData['name'])) {
-            $this->name = (int) $fileData['name'];
+            $this->name = $fileData['name'];
         }
     }
 
@@ -55,5 +55,9 @@ class LeadFile extends Model
     public function getName()
     {
         return $this->name;
+    }
+
+    public function validate(){
+        return true;
     }
 }

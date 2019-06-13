@@ -10,6 +10,7 @@ use LPTracker\models\ContactField;
 use LPTracker\models\Custom;
 use LPTracker\models\CustomField;
 use LPTracker\models\Lead;
+use LPTracker\models\LeadFile;
 use LPTracker\models\Project;
 use LPTracker\models\View;
 

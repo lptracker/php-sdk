@@ -12,6 +12,21 @@ class View extends Model
     protected $id;
 
     /**
+     * @var string
+     */
+    protected $uuid;
+
+    /**
+     * @var string
+     */
+    protected $ymClientId;
+
+    /**
+     * @var string
+     */
+    protected $gaClientId;
+
+    /**
      * @var integer
      */
     protected $projectId;
@@ -36,13 +51,32 @@ class View extends Model
      */
     protected $seoSystem;
 
+    /**
+     * @var Visitor|null
+     */
+    protected $visitor;
+
+    /**
+     * @var Visitor|null
+     */
+    protected $realVisitor;
+
     public function __construct(array $viewData = [])
     {
         if (isset($viewData['id'])) {
-            $this->id = $viewData['id'];
+            $this->id = (int) $viewData['id'];
         }
         if (isset($viewData['project_id'])) {
-            $this->projectId = $viewData['project_id'];
+            $this->projectId = (int) $viewData['project_id'];
+        }
+        if (isset($viewData['uuid'])) {
+            $this->uuid = $viewData['uuid'];
+        }
+        if (isset($viewData['ym_client_id'])) {
+            $this->ymClientId = $viewData['ym_client_id'];
+        }
+        if (isset($viewData['ga_client_id'])) {
+            $this->gaClientId = $viewData['ga_client_id'];
         }
         if (isset($viewData['source'])) {
             $this->source = $viewData['source'];
@@ -56,6 +90,12 @@ class View extends Model
         if (isset($viewData['seo_system'])) {
             $this->seoSystem = $viewData['seo_system'];
         }
+        if (isset($viewData['visitor'])) {
+            $this->visitor = new Visitor($viewData['visitor']);
+        }
+        if (isset($viewData['real_visitor'])) {
+            $this->realVisitor = new Visitor($viewData['real_visitor']);
+        }
     }
 
     /**
@@ -68,6 +108,12 @@ class View extends Model
             throw new LPTrackerSDKException('Project ID is required');
         }
 
+        if ($this->visitor !== null) {
+            $this->visitor->validate();
+        }
+        if ($this->realVisitor !== null) {
+            $this->realVisitor->validate();
+        }
         return true;
     }
 
@@ -82,6 +128,15 @@ class View extends Model
         if (!empty($this->id)) {
             $result['id'] = $this->getId();
         }
+        if (!empty($this->uuid)) {
+            $result['uuid'] = $this->getUuid();
+        }
+        if (!empty($this->ymClientId)) {
+            $result['ym_client_id'] = $this->getYmClientId();
+        }
+        if (!empty($this->gaClientId)) {
+            $result['ga_client_id'] = $this->getGaClientId();
+        }
         if (!empty($this->source)) {
             $result['source'] = $this->getSource();
         }
@@ -93,6 +148,12 @@ class View extends Model
         }
         if (!empty($this->seoSystem)) {
             $result['seo_system'] = $this->getSeoSystem();
+        }
+        if ($this->visitor !== null) {
+            $result['visitor'] = $this->visitor->toArray();
+        }
+        if ($this->realVisitor !== null) {
+            $result['real_visitor'] = $this->realVisitor->toArray();
         }
         return $result;
     }
@@ -183,5 +244,45 @@ class View extends Model
     {
         $this->seoSystem = $seoSystem;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getYmClientId()
+    {
+        return $this->ymClientId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGaClientId()
+    {
+        return $this->gaClientId;
+    }
+
+    /**
+     * @return Visitor|null
+     */
+    public function getVisitor()
+    {
+        return $this->visitor;
+    }
+
+    /**
+     * @return Visitor|null
+     */
+    public function getRealVisitor()
+    {
+        return $this->realVisitor;
     }
 }

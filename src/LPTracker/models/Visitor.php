@@ -34,13 +34,13 @@ final class Visitor extends Model
         if (isset($visitorData['version'])) {
             $this->version = (int) $visitorData['version'];
         }
-        if (!empty($visitorData['fingerprint'])) {
+        if (isset($visitorData['fingerprint'])) {
             $this->fingerprint = $visitorData['fingerprint'];
         }
-        if (!empty($visitorData['browser'])) {
+        if (isset($visitorData['browser'])) {
             $this->browser = $visitorData['browser'];
         }
-        if (!empty($visitorData['ip'])) {
+        if (isset($visitorData['ip'])) {
             $this->ip = $visitorData['ip'];
         }
     }

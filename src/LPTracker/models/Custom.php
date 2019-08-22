@@ -37,16 +37,16 @@ class Custom extends Model
      */
     public function __construct(array $customData = [], $leadId = 0)
     {
-        if (!isset($customData['id'])) {
+        if (isset($customData['id'])) {
             $this->id = (int) $customData['id'];
         }
-        if (!isset($customData['type'])) {
+        if (isset($customData['type'])) {
             $this->type = $customData['type'];
         }
-        if (!isset($customData['name'])) {
+        if (isset($customData['name'])) {
             $this->name = $customData['name'];
         }
-        if (!isset($customData['value'])) {
+        if (isset($customData['value'])) {
             $this->value = $customData['value'];
         }
         if ($leadId > 0) {

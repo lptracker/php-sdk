@@ -76,8 +76,11 @@ class Lead extends Model
         if (!empty($leadData['view'])) {
             $this->view = new View($leadData['view']);
         }
-        if (!empty($leadData['owner'])) {
+        if (isset($leadData['owner'])) {
             $this->ownerId = (int) $leadData['owner'];
+        }
+        if (isset($leadData['owner_id'])) {
+            $this->ownerId = (int) $leadData['owner_id'];
         }
         if (!empty($leadData['payments']) && is_array($leadData['payments'])) {
             foreach ($leadData['payments'] as $paymentData) {
@@ -124,9 +127,11 @@ class Lead extends Model
         }
         if (!empty($this->funnelId)) {
             $result['funnel'] = $this->getFunnelId();
+            $result['stage_id'] = $this->getFunnelId();
         }
         if (!empty($this->ownerId)) {
             $result['owner'] = $this->getOwnerId();
+            $result['owner_id'] = $this->getOwnerId();
         }
         if (!empty($this->createdAt)) {
             $result['lead_date'] = $this->getCreatedAt()->format('d.m.Y H:i');

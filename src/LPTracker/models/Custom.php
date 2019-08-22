@@ -7,7 +7,12 @@ use LPTracker\exceptions\LPTrackerSDKException;
 class Custom extends Model
 {
     /**
-     * @var integer
+     * @var int
+     */
+    protected $leadId;
+
+    /**
+     * @var int
      */
     protected $id;
 
@@ -22,11 +27,6 @@ class Custom extends Model
     protected $name;
 
     /**
-     * @var integer
-     */
-    protected $leadId;
-
-    /**
      * @var mixed
      */
     protected $value;
@@ -37,16 +37,16 @@ class Custom extends Model
      */
     public function __construct(array $customData = [], $leadId = 0)
     {
-        if (!empty($customData['id'])) {
-            $this->id = $customData['id'];
+        if (!isset($customData['id'])) {
+            $this->id = (int) $customData['id'];
         }
-        if (!empty($customData['type'])) {
+        if (!isset($customData['type'])) {
             $this->type = $customData['type'];
         }
-        if (!empty($customData['name'])) {
+        if (!isset($customData['name'])) {
             $this->name = $customData['name'];
         }
-        if (!empty($customData['value'])) {
+        if (!isset($customData['value'])) {
             $this->value = $customData['value'];
         }
         if ($leadId > 0) {
@@ -61,16 +61,10 @@ class Custom extends Model
     {
         $result = [
             'id' => $this->id,
+            'type' => $this->type,
+            'name' => $this->name,
+            'value' => $this->value,
         ];
-        if (!empty($this->type)) {
-            $result['type'] = $this->type;
-        }
-        if (!empty($this->name)) {
-            $result['name'] = $this->name;
-        }
-        if (!empty($this->value)) {
-            $result['value'] = $this->value;
-        }
         return $result;
     }
 
@@ -81,10 +75,28 @@ class Custom extends Model
     public function validate()
     {
         if (empty($this->id)) {
-            throw new LPTrackerSDKException('Id is required');
+            throw new LPTrackerSDKException('Custom ID is required');
         }
 
         return true;
+    }
+
+    /**
+     * @param int $leadId
+     * @return $this
+     */
+    public function setLeadId($leadId)
+    {
+        $this->leadId = (int) $leadId;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLeadId()
+    {
+        return $this->leadId;
     }
 
     /**
@@ -92,7 +104,7 @@ class Custom extends Model
      */
     public function getId()
     {
-        return (int) $this->id;
+        return $this->id;
     }
 
     /**
@@ -109,24 +121,6 @@ class Custom extends Model
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @param int $leadId
-     * @return $this
-     */
-    public function setLeadId($leadId)
-    {
-        $this->leadId = $leadId;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLeadId()
-    {
-        return $this->leadId;
     }
 
     /**

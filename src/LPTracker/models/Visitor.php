@@ -12,29 +12,35 @@ final class Visitor extends Model
     /**
      * @var int
      */
-    protected $version;
+    private $version;
 
     /**
      * @var string
      */
-    protected $fingerprint;
+    private $fingerprint;
 
     /**
      * @var string
      */
-    protected $browser;
+    private $browser;
 
     /**
      * @var string
      */
-    protected $ip;
+    private $ip;
 
     public function __construct(array $visitorData = [])
     {
-        if (isset($visitorData['version'], $visitorData['fingerprint'], $visitorData['browser'], $visitorData['ip'])) {
+        if (isset($visitorData['version'])) {
             $this->version = (int) $visitorData['version'];
+        }
+        if (!empty($visitorData['fingerprint'])) {
             $this->fingerprint = $visitorData['fingerprint'];
+        }
+        if (!empty($visitorData['browser'])) {
             $this->browser = $visitorData['browser'];
+        }
+        if (!empty($visitorData['ip'])) {
             $this->ip = $visitorData['ip'];
         }
     }

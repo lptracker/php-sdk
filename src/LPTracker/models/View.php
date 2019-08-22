@@ -52,6 +52,11 @@ class View extends Model
     protected $seoSystem;
 
     /**
+     * @var string
+     */
+    protected $page;
+
+    /**
      * @var Visitor|null
      */
     protected $visitor;
@@ -90,6 +95,9 @@ class View extends Model
         if (isset($viewData['seo_system'])) {
             $this->seoSystem = $viewData['seo_system'];
         }
+        if (isset($viewData['page'])) {
+            $this->page = $viewData['page'];
+        }
         if (isset($viewData['visitor'])) {
             $this->visitor = new Visitor($viewData['visitor']);
         }
@@ -123,38 +131,23 @@ class View extends Model
     public function toArray()
     {
         $result = [
+            'id' => $this->getId(),
             'project_id' => $this->getProjectId(),
+            'uuid' => $this->getUuid(),
+            'ym_client_id' => $this->getYmClientId(),
+            'ga_client_id' => $this->getGaClientId(),
+            'source' => $this->getSource(),
+            'campaign' => $this->getCampaign(),
+            'keyword' => $this->getKeyword(),
+            'seo_system' => $this->getSeoSystem(),
+            'page' => $this->getPage(),
+            'visitor' => $this->visitor !== null
+                ? $this->visitor->toArray()
+                : null,
+            'real_visitor' => $this->realVisitor !== null
+                ? $this->realVisitor->toArray()
+                : null,
         ];
-        if (!empty($this->id)) {
-            $result['id'] = $this->getId();
-        }
-        if (!empty($this->uuid)) {
-            $result['uuid'] = $this->getUuid();
-        }
-        if (!empty($this->ymClientId)) {
-            $result['ym_client_id'] = $this->getYmClientId();
-        }
-        if (!empty($this->gaClientId)) {
-            $result['ga_client_id'] = $this->getGaClientId();
-        }
-        if (!empty($this->source)) {
-            $result['source'] = $this->getSource();
-        }
-        if (!empty($this->campaign)) {
-            $result['campaign'] = $this->getCampaign();
-        }
-        if (!empty($this->keyword)) {
-            $result['keyword'] = $this->getKeyword();
-        }
-        if (!empty($this->seoSystem)) {
-            $result['seo_system'] = $this->getSeoSystem();
-        }
-        if ($this->visitor !== null) {
-            $result['visitor'] = $this->visitor->toArray();
-        }
-        if ($this->realVisitor !== null) {
-            $result['real_visitor'] = $this->realVisitor->toArray();
-        }
         return $result;
     }
 
@@ -243,6 +236,24 @@ class View extends Model
     public function setSeoSystem($seoSystem)
     {
         $this->seoSystem = $seoSystem;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * @param string $page
+     * @return $this
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
         return $this;
     }
 

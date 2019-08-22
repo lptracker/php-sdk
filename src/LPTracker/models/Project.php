@@ -7,7 +7,7 @@ use LPTracker\exceptions\LPTrackerSDKException;
 class Project extends Model
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $id;
 
@@ -29,7 +29,7 @@ class Project extends Model
     public function __construct(array $projectData = [])
     {
         if (isset($projectData['id'])) {
-            $this->id = $projectData['id'];
+            $this->id = (int) $projectData['id'];
         }
         if (isset($projectData['name'])) {
             $this->name = $projectData['name'];
@@ -38,7 +38,7 @@ class Project extends Model
             $this->page = $projectData['page'];
         }
         if (isset($projectData['domain'])) {
-            $this->page = $projectData['domain'];
+            $this->domain = $projectData['domain'];
         }
     }
 
@@ -77,7 +77,7 @@ class Project extends Model
      */
     public function getId()
     {
-        return (int) $this->id;
+        return $this->id;
     }
 
     /**

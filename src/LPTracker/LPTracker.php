@@ -856,7 +856,9 @@ class LPTracker extends LPTrackerBase
             $data = [
                 'options' => $options,
             ];
-            $response = LPTrackerRequest::sendRequest($url, $data, 'DELETE', $this->token, $this->address);
+            LPTrackerRequest::sendRequest($url, $data, 'DELETE', $this->token, $this->address);
+            $response = $custom->toArray();
+            $response['value'] = null;
         } else {
             $data = [
                 'value' => $custom->getValue(),

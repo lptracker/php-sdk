@@ -75,7 +75,7 @@ class ContactField extends Model
     public function validate()
     {
         if (empty($this->id)) {
-            throw new LPTrackerSDKException('Field id can not be null: ' . $this->__toString());
+            throw new LPTrackerSDKException('Field ID is required');
         }
 
         return true;
@@ -137,5 +137,13 @@ class ContactField extends Model
     {
         $this->value = $value;
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getContactId()
+    {
+        return $this->contactId;
     }
 }

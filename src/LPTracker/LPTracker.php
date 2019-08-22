@@ -408,12 +408,13 @@ class LPTracker extends LPTrackerBase
     /**
      * @param Contact|int $contact
      * @param ContactField|int $field
-     * @param string $newValue
+     * @param mixed $newValue
      * @return ContactField
+     * @throws LPTrackerSDKException
      * @throws exceptions\LPTrackerResponseException
      * @throws exceptions\LPTrackerServerException
      */
-    public function updateContactField($contact, $field, $newValue)
+    public function editContactField($contact, $field, $newValue)
     {
         if ($contact instanceof Contact) {
             $contact = $contact->getId();
@@ -425,11 +426,53 @@ class LPTracker extends LPTrackerBase
         } else {
             $field = (int) $field;
         }
-        $url = '/contact/' . $contact . '/field/' . $field;
-        $data = [
+        $fieldModel = new ContactField([
+            'id' => $field,
+            'contact_id' => $contact,
             'value' => $newValue,
-        ];
-        $response = LPTrackerRequest::sendRequest($url, $data, 'PUT', $this->token, $this->address);
+        ]);
+        $fieldModel->validate();
+        return $this->saveContactField($fieldModel);
+    }
+
+    /**
+     * @param Contact|int $contact
+     * @param ContactField|int $field
+     * @param string $newValue
+     * @return ContactField
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
+     * @deprecated Use editContactField()
+     */
+    public function updateContactField($contact, $field, $newValue)
+    {
+        return $this->editContactField($contact, $field, $newValue);
+    }
+
+    /**
+     * @param ContactField $field
+     * @return ContactField
+     * @throws LPTrackerSDKException
+     * @throws exceptions\LPTrackerResponseException
+     * @throws exceptions\LPTrackerServerException
+     */
+    public function saveContactField(ContactField $field)
+    {
+        if (!$field->validate() || empty($field->getContactId())) {
+            throw new LPTrackerSDKException('Invalid field');
+        }
+
+        $url = '/contact/' . $field->getContactId() . '/field/' . $field->getId();
+        if ($field->getValue() === null) {
+            LPTrackerRequest::sendRequest($url, [], 'DELETE', $this->token, $this->address);
+            $response = $field->toArray();
+            $response['value'] = null;
+        } else {
+            $data = [
+                'value' => $field->getValue(),
+            ];
+            $response = LPTrackerRequest::sendRequest($url, $data, 'PUT', $this->token, $this->address);
+        }
         return new ContactField($response);
     }
 

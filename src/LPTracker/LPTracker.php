@@ -752,6 +752,20 @@ class LPTracker extends LPTrackerBase
 
     /**
      * @param Lead|int $lead
+     */
+    public function callLead($lead)
+    {
+        if ($lead instanceof Lead) {
+            $lead = $lead->getId();
+        } else {
+            $lead = (int) $lead;
+        }
+        $url = '/lead/' . $lead . '/call';
+        LPTrackerRequest::sendRequest($url, [], 'POST', $this->token, $this->address);
+    }
+
+    /**
+     * @param Lead|int $lead
      * @param int $newStageId
      * @param array $options
      * @return Lead

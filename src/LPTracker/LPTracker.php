@@ -583,9 +583,7 @@ class LPTracker extends LPTrackerBase
             $lead->setView($this->createView($contactModel->getProjectId(), $viewData));
         }
         $data = $lead->toArray(true);
-        if (isset($options['callback'])) {
-            $data['callback'] = $options['callback'] ? true : false;
-        }
+        $data = array_merge($data, $options);
         if (isset($leadData['view_id'])) {
             $data['view_id'] = (int) $leadData['view_id'];
         } elseif (!empty($lead->getView()) && !empty($lead->getView()->getId())) {

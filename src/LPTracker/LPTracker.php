@@ -280,8 +280,12 @@ class LPTracker extends LPTrackerBase
         $data = $contact->toArray();
         if (!empty($data['fields'])) {
             $fields = [];
-            foreach ($data['fields'] as $field) {
-                $fields[$field['id']] = $field['value'];
+            foreach ($data['fields'] as $key => $field) {
+                if (is_array($field) && isset($field['id'], $field['value'])) {
+                    $fields[$field['id']] = $field['value'];
+                } else {
+                    $fields[$key] = $field;
+                }
             }
             $data['fields'] = $fields;
         }

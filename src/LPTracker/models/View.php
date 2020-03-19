@@ -57,6 +57,11 @@ class View extends Model
     protected $page;
 
     /**
+     * @var string
+     */
+    protected $referer;
+
+    /**
      * @var Visitor|null
      */
     protected $visitor;
@@ -97,6 +102,9 @@ class View extends Model
         }
         if (isset($viewData['page'])) {
             $this->page = $viewData['page'];
+        }
+        if (isset($viewData['referer'])) {
+            $this->referer = $viewData['referer'];
         }
         if (isset($viewData['visitor'])) {
             $this->visitor = new Visitor($viewData['visitor']);
@@ -141,6 +149,7 @@ class View extends Model
             'keyword' => $this->getKeyword(),
             'seo_system' => $this->getSeoSystem(),
             'page' => $this->getPage(),
+            'referer' => $this->getReferer(),
             'visitor' => $this->visitor !== null
                 ? $this->visitor->toArray()
                 : null,
@@ -254,6 +263,24 @@ class View extends Model
     public function setPage($page)
     {
         $this->page = $page;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReferer()
+    {
+        return $this->referer;
+    }
+
+    /**
+     * @param string $referer
+     * @return $this
+     */
+    public function setReferer($referer)
+    {
+        $this->referer = $referer;
         return $this;
     }
 

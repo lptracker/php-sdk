@@ -12,6 +12,8 @@ class ContactDetail extends Model
     const TYPE_ICQ = 'icq';
     const TYPE_FACEBOOK = 'facebook';
     const TYPE_VK = 'vk';
+    const TYPE_TELEGRAM = 'telegram';
+    const TYPE_VIBER = 'viber';
 
     /**
      * @var integer
@@ -61,6 +63,8 @@ class ContactDetail extends Model
             self::TYPE_ICQ,
             self::TYPE_FACEBOOK,
             self::TYPE_VK,
+            self::TYPE_TELEGRAM,
+            self::TYPE_VIBER,
         ];
     }
 

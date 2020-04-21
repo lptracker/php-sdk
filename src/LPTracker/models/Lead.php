@@ -17,6 +17,11 @@ class Lead extends Model
     protected $contactId;
 
     /**
+     * @var Contact
+     */
+    protected $contact;
+
+    /**
      * @var string
      */
     protected $name;
@@ -63,6 +68,9 @@ class Lead extends Model
         }
         if (!empty($leadData['contact_id'])) {
             $this->contactId = (int) $leadData['contact_id'];
+        }
+        if (!empty($leadData['contact'])) {
+            $this->contact = new Contact($leadData['contact']);
         }
         if (!empty($leadData['name'])) {
             $this->name = $leadData['name'];
@@ -119,6 +127,9 @@ class Lead extends Model
         $result = [
             'contact_id' => $this->contactId,
         ];
+        if (!empty($this->contact)) {
+            $result['contact'] = $this->contact->toArray();
+        }
         if (!empty($this->id)) {
             $result['id'] = $this->getId();
         }
@@ -197,6 +208,14 @@ class Lead extends Model
     public function getContactId()
     {
         return (int) $this->contactId;
+    }
+
+    /**
+     * @return Contact
+     */
+    public function getContact()
+    {
+        return $this->contact;
     }
 
     /**

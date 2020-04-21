@@ -15,12 +15,12 @@ abstract class LPTrackerBase
     /**
      * Адрес апи по умолчанию
      */
-    const DEFAULT_ADDRESS = 'http://direct.lptracker.ru';
+    const DEFAULT_ADDRESS = 'https://direct.lptracker.ru';
 
     /**
      * Название сервиса по умолчанию
      */
-    const DEFAULT_SERVICE_NAME = 'api (sdk)';
+    const DEFAULT_SERVICE_NAME = 'PHP SDK';
 
     /**
      * Ключ переменной окружения логина/email главного аккаунта

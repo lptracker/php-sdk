@@ -32,6 +32,11 @@ class Lead extends Model
     protected $funnelId;
 
     /**
+     * @var integer
+     */
+    protected $viewId;
+
+    /**
      * @var View
      */
     protected $view;
@@ -81,6 +86,9 @@ class Lead extends Model
         if (!empty($leadData['stage_id'])) {
             $this->funnelId = (int) $leadData['stage_id'];
         }
+        if (!empty($leadData['view_id'])) {
+            $this->viewId = (int) $leadData['view_id'];
+        }
         if (!empty($leadData['view'])) {
             $this->view = new View($leadData['view']);
         }
@@ -124,11 +132,20 @@ class Lead extends Model
      */
     public function toArray($toSave = false)
     {
-        $result = [
-            'contact_id' => $this->contactId,
-        ];
+        $result = [];
+        if (!empty($this->contactId)) {
+            $result['contact_id'] = $this->contactId;
+        }
         if (!empty($this->contact)) {
-            $result['contact'] = $this->contact->toArray();
+            if ($toSave) {
+                if (!empty($this->contact->getId())) {
+                    $result['contact_id'] = $this->contact->getId();
+                } else {
+                    $result['contact'] = $this->contact->toArray();
+                }
+            } else {
+                $result['contact'] = $this->contact->toArray();
+            }
         }
         if (!empty($this->id)) {
             $result['id'] = $this->getId();
@@ -147,8 +164,19 @@ class Lead extends Model
         if (!empty($this->createdAt)) {
             $result['lead_date'] = $this->getCreatedAt()->format('d.m.Y H:i');
         }
+        if (!empty($this->viewId)) {
+            $result['view_id'] = $this->viewId;
+        }
         if (!empty($this->view)) {
-            $result['view'] = $this->view->toArray();
+            if ($toSave) {
+                if (!empty($this->view->getId())) {
+                    $result['view_id'] = $this->view->getId();
+                } else {
+                    $result['view'] = $this->view->toArray();
+                }
+            } else {
+                $result['view'] = $this->view->toArray();
+            }
         }
         foreach ($this->getPayments() as $payment) {
             $result['payments'][] = $payment->toArray();
@@ -172,12 +200,12 @@ class Lead extends Model
      */
     public function validate()
     {
-        if (empty($this->contactId)) {
-            throw new LPTrackerSDKException('Contact ID is required');
+        if (empty($this->contactId) && empty($this->contact)) {
+            throw new LPTrackerSDKException('Contact ID or contact is required');
         }
 
-        if ((int) $this->contactId <= 0) {
-            throw new LPTrackerSDKException('Invalid contact id');
+        if ((int) $this->contactId < 0) {
+            throw new LPTrackerSDKException('Invalid contact ID');
         }
 
         if (!empty($this->funnelId) && (int) $this->funnelId <= 0) {
@@ -252,6 +280,14 @@ class Lead extends Model
     {
         $this->funnelId = (int) $funnelId;
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getViewId()
+    {
+        return (int) $this->viewId;
     }
 
     /**

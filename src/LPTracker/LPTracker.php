@@ -572,7 +572,11 @@ class LPTracker extends LPTrackerBase
     public function createLead($contact, array $leadData = [], array $options = [])
     {
         if ($contact instanceof Contact) {
-            $leadData['contact_id'] = $contact->getId();
+            if (!empty($contact->getId())) {
+                $leadData['contact_id'] = $contact->getId();
+            } else {
+                $leadData['contact'] = $contact->toArray();
+            }
         } else {
             $leadData['contact_id'] = (int) $contact;
         }
@@ -581,18 +585,8 @@ class LPTracker extends LPTrackerBase
             throw new LPTrackerSDKException('Invalid lead data');
         }
 
-        if (!empty($lead->getView()) && empty($lead->getView()->getId())) {
-            $contactModel = $this->getContact($contact);
-            $viewData = $lead->getView()->toArray();
-            $lead->setView($this->createView($contactModel->getProjectId(), $viewData));
-        }
         $data = $lead->toArray(true);
         $data = array_merge($data, $options);
-        if (isset($leadData['view_id'])) {
-            $data['view_id'] = (int) $leadData['view_id'];
-        } elseif (!empty($lead->getView()) && !empty($lead->getView()->getId())) {
-            $data['view_id'] = $lead->getView()->getId();
-        }
         $response = LPTrackerRequest::sendRequest('/lead', $data, 'POST', $this->token, $this->address);
         return new Lead($response);
     }

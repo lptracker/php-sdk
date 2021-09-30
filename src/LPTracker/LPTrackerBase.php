@@ -131,6 +131,9 @@ abstract class LPTrackerBase
         return $this;
     }
 
+    /**
+     * @param array $curlOptions
+     */
     public function setCurlOptions($curlOptions)
     {
         LPTrackerRequest::$curlOptions = $curlOptions;

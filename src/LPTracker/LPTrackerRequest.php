@@ -10,6 +10,8 @@ use LPTracker\exceptions\LPTrackerServerException;
 
 class LPTrackerRequest
 {
+    public static $curlOptions = [];
+
     /**
      * @param string $actionUrl
      * @param array $data
@@ -37,8 +39,11 @@ class LPTrackerRequest
         if ($token instanceof AccessToken) {
             $request->setHeader('token', $token->getValue());
         }
+        if (self::$curlOptions) {
+            $request->setOptions(self::$curlOptions);
+        }
         $response = $request->send();
-        if ($response === false) {
+        if (!$response) {
             throw new LPTrackerServerException('Can`t get response from server');
         }
 

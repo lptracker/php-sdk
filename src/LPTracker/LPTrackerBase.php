@@ -132,6 +132,14 @@ abstract class LPTrackerBase
     }
 
     /**
+     * @param array $curlOptions
+     */
+    public function setCurlOptions($curlOptions)
+    {
+        LPTrackerRequest::$curlOptions = $curlOptions;
+    }
+
+    /**
      * @param string $login
      * @param string $password
      * @param string $serviceName
